@@ -1,5 +1,5 @@
 package com.sternhalma.common.games.Sternhalma;
 
-public class Board {
+public class Piece {
     //TODO: Implement
 }
