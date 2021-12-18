@@ -1,39 +1,51 @@
 package com.sternhalma.server;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class Player implements Runnable {
     private final Socket playerSocket;
-    private PrintWriter output;
+    //private PrintWriter output;
     private Scanner input;
+    private ObjectOutputStream objectOutputStream;
+
     public Player(Socket socket) {
         this.playerSocket = socket;
     }
 
+
     @Override
     public void run() {
         try {
-            output = new PrintWriter(playerSocket.getOutputStream(), true);
+            //output = new PrintWriter(playerSocket.getOutputStream(), true);
             input = new Scanner(playerSocket.getInputStream());
-            while(input.hasNextLine()) {
+            objectOutputStream = new ObjectOutputStream(playerSocket.getOutputStream());
+            while (input.hasNextLine()) {
                 String line = input.nextLine();
-                //TODO: Tablicować splita co by nie splitować za każdym razem...
-                String request = line.split(":")[0];
+                String[] tokens = line.split(":", 3);
+                String request = tokens[0];
+
+
                 switch (request) {
                     case "createGame" -> {
-                        output.println(GameManager.getInstance().createGame(line.split(":")[1], line.split(":")[2]));
+                        String gameID = tokens[1];
+                        String gameType = tokens[2];
+                        sendMessage(GameManager.getInstance().createGame(gameID, gameType));
                     }
                     case "joinGame" -> {
-                        output.println(GameManager.getInstance().joinGame(this, line.split(":")[1]));
+                        String gameID = tokens[1];
+                        sendMessage(GameManager.getInstance().joinGame(this, gameID));
                     }
                     case "performAction" -> {
-                        output.println(GameManager.getInstance().performAction(this, line.split(":")[1], line.substring(14).substring(line.split(":")[1].length() + 1)));
+                        String gameID = tokens[1];
+                        String action = tokens[2];
+                        sendMessage(GameManager.getInstance().performAction(this, gameID, action));
                     }
                     default -> {
-                        output.println("Bad request!");
+                        sendMessage("Bad request!");
                     }
                 }
             }
@@ -45,13 +57,24 @@ public class Player implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            input = null;
+            objectOutputStream = null;
         }
 
     }
 
-    public synchronized void sendData(String data) {
-        if(output == null)
+    public synchronized void sendObject(Object data) {
+        if (objectOutputStream == null) {
             throw new IllegalStateException();
-        output.println(data);
+        }
+        try {
+            objectOutputStream.writeObject(data);
+        } catch (IOException e){
+            //TODO
+        }
+    }
+
+    public void sendMessage(String data) {
+        sendObject(data);
     }
 }
