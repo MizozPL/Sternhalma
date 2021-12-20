@@ -68,6 +68,7 @@ public class Player implements Runnable {
             throw new IllegalStateException();
         }
         try {
+            objectOutputStream.reset();
             objectOutputStream.writeObject(data);
         } catch (IOException e){
             //TODO
