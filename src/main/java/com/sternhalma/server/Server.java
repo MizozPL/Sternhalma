@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-    private static final int THREADS = 4;
+    private static final int THREADS = 10;
     private static final int BACKLOG = 10;
     private final String address;
     private final int port;

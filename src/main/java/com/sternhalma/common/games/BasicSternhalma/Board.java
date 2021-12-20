@@ -46,6 +46,10 @@ public class Board implements Serializable {
         return playerPieces;
     }
 
+    private void clearBoard() {
+        piecesWithPosition.clear();
+    }
+
     public Board() {
         numberOfPlayers = 0;
         piecesWithPosition = new HashMap<>();
@@ -140,25 +144,30 @@ public class Board implements Serializable {
         numberOfPlayers++;
         switch (numberOfPlayers) {
             case 1 -> {
+                clearBoard();
                 setPiecesAtPositionOne(1);
             }
             case 2 -> {
+                clearBoard();
                 setPiecesAtPositionOne(1);
                 setPiecesAtPositionFour(2);
             }
             case 3 -> {
+                clearBoard();
                 setPiecesAtPositionOne(1);
                 setPiecesAtPositionThree(2);
                 setPiecesAtPositionFive(3);
 
             }
             case 4 -> {
+                clearBoard();
                 setPiecesAtPositionOne(1);
                 setPiecesAtPositionFour(2);
                 setPiecesAtPositionTwo(3);
                 setPiecesAtPositionFive(4);
             }
             case 5 -> {
+                clearBoard();
                 setPiecesAtPositionOne(1);
                 setPiecesAtPositionFour(2);
                 setPiecesAtPositionTwo(3);
@@ -166,6 +175,7 @@ public class Board implements Serializable {
                 setPiecesAtPositionThree(5);
             }
             case 6 -> {
+                clearBoard();
                 setPiecesAtPositionOne(1);
                 setPiecesAtPositionFour(2);
                 setPiecesAtPositionTwo(3);
