@@ -4,6 +4,7 @@ import com.sternhalma.common.games.BasicSternhalma.Board;
 import com.sternhalma.server.Game;
 import com.sternhalma.server.Player;
 
+import java.awt.*;
 import java.util.HashMap;
 
 public class BasicSternhalma implements Game {

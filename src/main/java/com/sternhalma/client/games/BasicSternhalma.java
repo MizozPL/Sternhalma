@@ -5,6 +5,8 @@ import com.sternhalma.client.Game;
 import com.sternhalma.client.gui.BasicSternhalmaPanel;
 import com.sternhalma.common.games.BasicSternhalma.Board;
 
+import java.awt.*;
+
 public class BasicSternhalma implements Game {
     private BasicSternhalmaPanel panel;
 
@@ -16,9 +18,8 @@ public class BasicSternhalma implements Game {
         while(true){
             object = client.readObject();
             if(object instanceof Board) {
-                //Log
-                System.out.println("BoardUpdate");
-                panel.setBoard((Board) object);
+                Board board = (Board) object;
+                panel.setBoard(board);
                 continue;
             }
             if(object instanceof String) {
