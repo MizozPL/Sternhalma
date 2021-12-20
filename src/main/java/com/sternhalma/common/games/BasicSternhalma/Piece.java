@@ -1,6 +1,4 @@
-package com.sternhalma.common.games.Sternhalma;
-
-import com.sternhalma.server.Player;
+package com.sternhalma.common.games.BasicSternhalma;
 
 public class Piece {
     //TODO: Implement

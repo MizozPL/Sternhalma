@@ -1,6 +1,6 @@
-package com.sternhalma.server.games.Sternhalma;
+package com.sternhalma.server.games.BasicSternhalma;
 
-import com.sternhalma.common.games.Sternhalma.Board;
+import com.sternhalma.common.games.BasicSternhalma.Board;
 import com.sternhalma.server.Game;
 import com.sternhalma.server.Player;
 

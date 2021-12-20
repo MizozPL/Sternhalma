@@ -1,6 +1,6 @@
 package com.sternhalma.server;
 
-import com.sternhalma.server.games.Sternhalma.BasicSternhalma;
+import com.sternhalma.server.games.BasicSternhalma.BasicSternhalma;
 
 public class GameFactory {
 

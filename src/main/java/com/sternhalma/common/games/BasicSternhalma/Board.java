@@ -1,4 +1,4 @@
-package com.sternhalma.common.games.Sternhalma;
+package com.sternhalma.common.games.BasicSternhalma;
 
 import java.awt.*;
 import java.util.HashMap;
