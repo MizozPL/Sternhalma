@@ -57,6 +57,7 @@ public class Board implements Serializable {
 
     public void movePiece(Point oldPosition, Point newPosition) {
         piecesWithPosition.put(newPosition, piecesWithPosition.get(oldPosition));
+        piecesWithPosition.remove(oldPosition);
     }
 
     public boolean isValidPoint(Point point) {

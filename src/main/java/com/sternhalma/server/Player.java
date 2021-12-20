@@ -28,7 +28,6 @@ public class Player implements Runnable {
                 String[] tokens = line.split(":", 3);
                 String request = tokens[0];
 
-
                 switch (request) {
                     case "createGame" -> {
                         String gameID = tokens[1];

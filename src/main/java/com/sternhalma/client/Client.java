@@ -25,6 +25,10 @@ public class Client {
         clientFrame = new ClientFrame(address+":"+port);
     }
 
+    public String getGameID() {
+        return gameID;
+    }
+
     public void connect(){
         try(Socket socket = new Socket(InetAddress.getByName(address), port)){
             objectInputStream = new ObjectInputStream(socket.getInputStream());
@@ -55,25 +59,29 @@ public class Client {
         return clientFrame;
     }
 
-    public synchronized void sendMessage(String message){
-        if (printWriter == null) {
-            throw new IllegalStateException();
+    public void sendMessage(String message){
+        synchronized(printWriter) {
+            if (printWriter == null) {
+                throw new IllegalStateException();
+            }
+            printWriter.println(message);
         }
-        printWriter.println(message);
     }
 
-    public synchronized Object readObject(){
-        if (objectInputStream == null) {
-            throw new IllegalStateException();
-        }
-        try {
-            return objectInputStream.readObject();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    public Object readObject(){
+        synchronized (objectInputStream) {
+            if (objectInputStream == null) {
+                throw new IllegalStateException();
+            }
+            try {
+                return objectInputStream.readObject();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
 
-        return null;
+            return null;
+        }
     }
 }

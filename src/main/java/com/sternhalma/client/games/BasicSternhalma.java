@@ -9,11 +9,13 @@ import java.awt.*;
 
 public class BasicSternhalma implements Game {
     private BasicSternhalmaPanel panel;
+    private Client client;
 
     @Override
     public void init(Client client) {
-        panel = new BasicSternhalmaPanel();
-        client.getClientFrame().setGamePanel(panel);
+        panel = new BasicSternhalmaPanel(this);
+        this.client = client;
+        this.client.getClientFrame().setGamePanel(panel);
         Object object;
         while(true){
             object = client.readObject();
@@ -26,5 +28,9 @@ public class BasicSternhalma implements Game {
                 //TODO: Handle Messages
             }
         }
+    }
+
+    public void movePiece(Point from, Point to){
+        client.sendMessage("performAction:"+ client.getGameID() +":MOVE:"+from.x+","+from.y+":"+to.x+","+to.y);
     }
 }

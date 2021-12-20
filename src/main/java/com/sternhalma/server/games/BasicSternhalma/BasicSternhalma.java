@@ -43,7 +43,14 @@ public class BasicSternhalma implements Game {
         String command = tokens[0];
         switch (command) {
             case "MOVE" -> {
-                //board.movePiece(oldPosition, newPosition);
+                String fromStr = tokens[1];
+                String toStr = tokens[2];
+                board.movePiece(new Point(Integer.parseInt(fromStr.split(",")[0]),Integer.parseInt(fromStr.split(",")[1])), new Point(Integer.parseInt(toStr.split(",")[0]),Integer.parseInt(toStr.split(",")[1])));
+                //System.out.println(new Point(Integer.parseInt(fromStr.split(",")[0]),Integer.parseInt(fromStr.split(",")[1])) + ":::" + new Point(Integer.parseInt(toStr.split(",")[0]),Integer.parseInt(toStr.split(",")[1])));
+                for (Player p : players.keySet()) {
+                    p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn);
+                    p.sendObject(board);
+                }
             }
         }
         return false;
