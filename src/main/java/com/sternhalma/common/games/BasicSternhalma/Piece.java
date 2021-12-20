@@ -1,7 +1,8 @@
 package com.sternhalma.common.games.BasicSternhalma;
 
-public class Piece {
-    //TODO: Implement
+import java.io.Serializable;
+
+public class Piece implements Serializable {
     private int playerNumber;
 
     public Piece(int playerNumber) {

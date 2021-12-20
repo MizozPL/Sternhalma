@@ -1,12 +1,19 @@
 package com.sternhalma.common.games.BasicSternhalma;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-public class Board {
+public class Board implements Serializable {
     private int numberOfPlayers;
     private static final HashSet<Point> validPoints;
+
+    public Set<Point> getValidPositions(){
+        return validPoints;
+    }
 
     static {
         validPoints = new HashSet<>();
@@ -29,6 +36,15 @@ public class Board {
 
     private HashMap<Point, Piece> piecesWithPosition;
 
+    public Set<Point> getPlayerPiecesCoordinates(int playerID){
+        HashSet<Point> playerPieces = new HashSet<>();
+        for(HashMap.Entry<Point, Piece> entry : piecesWithPosition.entrySet()) {
+            if(entry.getValue().getPlayerNumber()==playerID){
+                playerPieces.add(entry.getKey());
+            }
+        }
+        return playerPieces;
+    }
 
     public Board() {
         numberOfPlayers = 0;

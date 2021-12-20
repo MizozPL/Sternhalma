@@ -74,6 +74,7 @@ public class Player implements Runnable {
         }
     }
 
+    //Nie musi być synchronized bo korzysta z sendObject
     public void sendMessage(String data) {
         sendObject(data);
     }
