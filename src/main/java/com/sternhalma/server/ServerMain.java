@@ -1,5 +1,7 @@
 package com.sternhalma.server;
 
+import com.sternhalma.server.connection.Server;
+
 public class ServerMain {
 
     public static final int DEFAULT_PORT = 25000;

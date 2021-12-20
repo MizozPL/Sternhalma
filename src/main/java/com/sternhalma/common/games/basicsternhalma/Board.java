@@ -1,10 +1,9 @@
-package com.sternhalma.common.games.BasicSternhalma;
+package com.sternhalma.common.games.basicsternhalma;
 
 import java.awt.*;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class Board implements Serializable {

@@ -1,7 +1,5 @@
 package com.sternhalma.client.gui;
 
-import com.sternhalma.client.Client;
-
 import javax.swing.*;
 import java.awt.*;
 

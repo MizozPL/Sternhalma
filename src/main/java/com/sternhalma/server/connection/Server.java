@@ -1,4 +1,4 @@
-package com.sternhalma.server;
+package com.sternhalma.server.connection;
 
 import java.io.IOException;
 import java.net.InetAddress;

@@ -1,4 +1,4 @@
-package com.sternhalma.common.games.BasicSternhalma;
+package com.sternhalma.common.games.basicsternhalma;
 
 import java.io.Serializable;
 

@@ -1,7 +1,8 @@
-package com.sternhalma.client;
+package com.sternhalma.client.connection;
 
+import com.sternhalma.client.games.Game;
+import com.sternhalma.client.games.GameFactory;
 import com.sternhalma.client.gui.ClientFrame;
-import com.sternhalma.common.games.BasicSternhalma.Board;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

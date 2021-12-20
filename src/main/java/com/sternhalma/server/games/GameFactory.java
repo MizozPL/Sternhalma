@@ -1,9 +1,10 @@
-package com.sternhalma.client;
+package com.sternhalma.server.games;
 
-import com.sternhalma.client.games.BasicSternhalma;
+import com.sternhalma.server.games.basicsternhalma.BasicSternhalma;
 
 public class GameFactory {
-    public static Game creteGameInstance(String gameName) {
+
+    public Game createGame(String gameName){
         switch(gameName) {
             case "BasicSternhalma" -> {
                 return new BasicSternhalma();

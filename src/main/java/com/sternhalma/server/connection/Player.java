@@ -1,8 +1,9 @@
-package com.sternhalma.server;
+package com.sternhalma.server.connection;
+
+import com.sternhalma.server.games.GameManager;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 

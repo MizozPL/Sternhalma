@@ -1,8 +1,8 @@
-package com.sternhalma.server.games.BasicSternhalma;
+package com.sternhalma.server.games.basicsternhalma;
 
-import com.sternhalma.common.games.BasicSternhalma.Board;
-import com.sternhalma.server.Game;
-import com.sternhalma.server.Player;
+import com.sternhalma.common.games.basicsternhalma.Board;
+import com.sternhalma.server.games.Game;
+import com.sternhalma.server.connection.Player;
 
 import java.awt.*;
 import java.util.HashMap;

@@ -1,5 +1,7 @@
 package com.sternhalma.client;
 
+import com.sternhalma.client.connection.Client;
+
 import javax.swing.*;
 
 public class ClientMain {

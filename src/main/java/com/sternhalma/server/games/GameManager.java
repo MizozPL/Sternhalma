@@ -1,4 +1,6 @@
-package com.sternhalma.server;
+package com.sternhalma.server.games;
+
+import com.sternhalma.server.connection.Player;
 
 import java.util.HashMap;
 

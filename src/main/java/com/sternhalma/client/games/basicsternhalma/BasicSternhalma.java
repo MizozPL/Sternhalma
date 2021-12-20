@@ -1,9 +1,9 @@
-package com.sternhalma.client.games;
+package com.sternhalma.client.games.basicsternhalma;
 
-import com.sternhalma.client.Client;
-import com.sternhalma.client.Game;
-import com.sternhalma.client.gui.BasicSternhalmaPanel;
-import com.sternhalma.common.games.BasicSternhalma.Board;
+import com.sternhalma.client.connection.Client;
+import com.sternhalma.client.games.Game;
+import com.sternhalma.client.games.basicsternhalma.gui.BasicSternhalmaPanel;
+import com.sternhalma.common.games.basicsternhalma.Board;
 
 import java.awt.*;
 
