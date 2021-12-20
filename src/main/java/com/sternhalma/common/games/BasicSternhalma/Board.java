@@ -20,14 +20,14 @@ public class Board implements Serializable {
         int mxMidPoint = 12;
         for (int i = 0; i < 13; i++) {
             for (int j = 0; j <= i; j++) {
-                validPoints.add(new Point(i, mxMidPoint + j * 2));
+                validPoints.add(new Point(mxMidPoint + j * 2, i));
             }
             mxMidPoint -= 1;
         }
         mxMidPoint = 12;
         for (int i = 16; i >= 4; i--) {
             for (int j = 0; j <= 16 - i; j++) {
-                validPoints.add(new Point(i, mxMidPoint + j * 2));
+                validPoints.add(new Point(mxMidPoint + j * 2, i));
             }
             mxMidPoint--;
         }
@@ -59,7 +59,7 @@ public class Board implements Serializable {
         piecesWithPosition.put(newPosition, piecesWithPosition.get(oldPosition));
     }
 
-    public boolean isValidPoint(Point point){
+    public boolean isValidPoint(Point point) {
         return validPoints.contains(point);
     }
 
@@ -67,7 +67,7 @@ public class Board implements Serializable {
         int xMidPoint = 12;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j <= i; j++) {
-                Point point = new Point(i, xMidPoint + j * 2);
+                Point point = new Point(xMidPoint + j * 2, i);
                 Piece piece = new Piece(playerID);
                 piecesWithPosition.put(point, piece);
             }
@@ -80,7 +80,7 @@ public class Board implements Serializable {
         int xMidPoint = 21;
         for (int i = 9; i < 13; i++) {
             for (int j = 0; j <= i - 9; j++) {
-                Point point = new Point(i, xMidPoint + j * 2);
+                Point point = new Point(xMidPoint + j * 2, i);
                 Piece piece = new Piece(playerID);
                 piecesWithPosition.put(point, piece);
             }
@@ -92,7 +92,7 @@ public class Board implements Serializable {
         int xMidPoint = 3;
         for (int i = 9; i < 13; i++) {
             for (int j = 0; j <= i - 9; j++) {
-                Point point = new Point(i, xMidPoint + j * 2);
+                Point point = new Point(xMidPoint + j * 2, i);
                 Piece piece = new Piece(playerID);
                 piecesWithPosition.put(point, piece);
             }
@@ -102,9 +102,9 @@ public class Board implements Serializable {
 
     private void setPiecesAtPositionFour(int playerID) {
         int xMidPoint = 12;
-        for (int i = 16; i >= 12; i--) {
+        for (int i = 16; i > 12; i--) {
             for (int j = 0; j <= 16 - i; j++) {
-                Point point = new Point(i, xMidPoint + j * 2);
+                Point point = new Point(xMidPoint + j * 2, i);
                 Piece piece = new Piece(playerID);
                 piecesWithPosition.put(point, piece);
             }
@@ -116,7 +116,7 @@ public class Board implements Serializable {
         int xMidPoint = 21;
         for (int i = 7; i >= 4; i--) {
             for (int j = 0; j <= 7 - i; j++) {
-                Point point = new Point(i, xMidPoint + j * 2);
+                Point point = new Point(xMidPoint + j * 2, i);
                 Piece piece = new Piece(playerID);
                 piecesWithPosition.put(point, piece);
             }
@@ -128,17 +128,12 @@ public class Board implements Serializable {
         int xMidPoint = 3;
         for (int i = 7; i >= 4; i--) {
             for (int j = 0; j <= 7 - i; j++) {
-                Point point = new Point(i, xMidPoint + j * 2);
+                Point point = new Point(xMidPoint + j * 2, i);
                 Piece piece = new Piece(playerID);
                 piecesWithPosition.put(point, piece);
             }
             xMidPoint -= 1;
         }
-    }
-
-    public static void main(String[] args) {
-        Point p = new Point(2,3);
-        System.out.println(p.toString());
     }
 
     public int addPlayer() {
