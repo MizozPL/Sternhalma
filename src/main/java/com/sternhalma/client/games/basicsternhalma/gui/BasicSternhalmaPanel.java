@@ -14,7 +14,11 @@ public class BasicSternhalmaPanel extends JPanel implements MouseListener {
     private Point selectedPosition = null;
     private final BasicSternhalma basicSternhalma;
 
-    public BasicSternhalmaPanel(BasicSternhalma basicSternhalma){
+    private static final int SIZE = 20;
+    private static final int SCALEX = 25;
+    private static final int SCALEY = 36;
+
+    public BasicSternhalmaPanel(BasicSternhalma basicSternhalma) {
         board = new Board();
         this.basicSternhalma = basicSternhalma;
         addMouseListener(this);
@@ -29,41 +33,39 @@ public class BasicSternhalmaPanel extends JPanel implements MouseListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.gray);
-        for(Point point : board.getValidPositions()){
-            g2d.fillOval(20* point.x, 30*point.y, 15, 15);
-        }
-        g2d.setColor(Color.RED);
-        for(Point point : board.getPlayerPiecesCoordinates(1))
-            g2d.fillOval(20* point.x, 30*point.y, 15, 15);
-        g2d.setColor(Color.GREEN);
-        for(Point point : board.getPlayerPiecesCoordinates(2))
-            g2d.fillOval(20* point.x, 30*point.y, 15, 15);
-        g2d.setColor(Color.ORANGE);
-        for(Point point : board.getPlayerPiecesCoordinates(3))
-            g2d.fillOval(20* point.x, 30*point.y, 15, 15);
-        g2d.setColor(Color.YELLOW);
-        for(Point point : board.getPlayerPiecesCoordinates(4))
-            g2d.fillOval(20* point.x, 30*point.y, 15, 15);
-        g2d.setColor(Color.PINK);
-        for(Point point : board.getPlayerPiecesCoordinates(5))
-            g2d.fillOval(20* point.x, 30*point.y, 15, 15);
-        g2d.setColor(Color.CYAN);
-        for(Point point : board.getPlayerPiecesCoordinates(6))
-            g2d.fillOval(20* point.x, 30*point.y, 15, 15);
+        drawAllValidSpots(g2d, Color.GRAY);
+        drawPlayerStartingPieces(g2d, 1, Color.RED);
+        drawPlayerStartingPieces(g2d, 2, Color.GREEN);
+        drawPlayerStartingPieces(g2d, 3, Color.ORANGE);
+        drawPlayerStartingPieces(g2d, 4, Color.YELLOW);
+        drawPlayerStartingPieces(g2d, 5, Color.PINK);
+        drawPlayerStartingPieces(g2d, 6, Color.CYAN);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        Point point = new Point(e.getX()/20, e.getY()/30);
-        if(board.getPieceAt(point) != null){
+        Point point = new Point(e.getX() / SCALEX, e.getY() / SCALEY);
+        if (board.getPieceAt(point) != null) {
             selectedPosition = point;
         } else {
-            if(board.getPieceAt(selectedPosition) != null) {
+            if (board.getPieceAt(selectedPosition) != null && board.getValidPositions().contains(point)) {
                 basicSternhalma.movePiece(selectedPosition, point);
                 selectedPosition = null;
             }
         }
+    }
+
+    private void drawAllValidSpots(Graphics2D g2d, Color color) {
+        g2d.setColor(color);
+        for (Point point : board.getValidPositions()) {
+            g2d.fillOval(SCALEX * point.x, SCALEY * point.y, SIZE, SIZE);
+        }
+    }
+
+    private void drawPlayerStartingPieces(Graphics2D g2d, int playerID, Color color) {
+        g2d.setColor(color);
+        for (Point point : board.getPlayerPiecesCoordinates(playerID))
+            g2d.fillOval(SCALEX * point.x, SCALEY * point.y, SIZE, SIZE);
     }
 
     @Override
