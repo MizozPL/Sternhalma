@@ -15,8 +15,8 @@ public class BasicSternhalmaPanel extends JPanel implements MouseListener {
     private final BasicSternhalma basicSternhalma;
 
     private static final int SIZE = 20;
-    private static final int SCALEX = 25;
-    private static final int SCALEY = 36;
+    private static final int SCALEX = 20;
+    private static final int SCALEY = 30;
 
     public BasicSternhalmaPanel(BasicSternhalma basicSternhalma) {
         board = new Board();
