@@ -33,6 +33,7 @@ public class BasicSternhalmaPanel extends JPanel implements MouseListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         drawAllValidSpots(g2d, Color.GRAY);
         drawPlayerStartingPieces(g2d, 1, Color.RED);
         drawPlayerStartingPieces(g2d, 2, Color.GREEN);
