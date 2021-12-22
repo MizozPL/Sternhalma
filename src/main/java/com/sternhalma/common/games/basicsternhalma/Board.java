@@ -9,9 +9,23 @@ import java.util.Set;
 public class Board implements Serializable {
     private int numberOfPlayers;
     private static final HashSet<Point> validPoints;
+    private final HashMap<Point, Piece> piecesWithPosition;
 
-    public Set<Point> getValidPositions(){
+    public Set<Point> getValidPositions() {
         return validPoints;
+    }
+
+    public boolean canJump(Point oldP, Point newP, int offsetX, int offsetY) {
+        int newX = newP.x;
+        int newY = newP.y;
+        int oldX = oldP.x;
+        int oldY = oldP.y;
+        return ((newX - oldX) == 2 * offsetX && (newY - oldY) == 2 * offsetY)
+                && getAllPiecesPositions().contains(new Point(oldX + offsetX, oldY + offsetY));
+    }
+
+    public Set<Point> getAllPiecesPositions() {
+        return piecesWithPosition.keySet();
     }
 
     static {
@@ -33,12 +47,10 @@ public class Board implements Serializable {
 
     }
 
-    private HashMap<Point, Piece> piecesWithPosition;
-
-    public Set<Point> getPlayerPiecesCoordinates(int playerID){
+    public Set<Point> getPlayerPiecesCoordinates(int playerID) {
         HashSet<Point> playerPieces = new HashSet<>();
-        for(HashMap.Entry<Point, Piece> entry : piecesWithPosition.entrySet()) {
-            if(entry.getValue().getPlayerNumber()==playerID){
+        for (HashMap.Entry<Point, Piece> entry : piecesWithPosition.entrySet()) {
+            if (entry.getValue().getPlayerNumber() == playerID) {
                 playerPieces.add(entry.getKey());
             }
         }

@@ -1,11 +1,13 @@
 package com.sternhalma.server.games.basicsternhalma;
 
 import com.sternhalma.common.games.basicsternhalma.Board;
-import com.sternhalma.server.games.Game;
 import com.sternhalma.server.connection.Player;
+import com.sternhalma.server.games.Game;
 
 import java.awt.*;
 import java.util.HashMap;
+
+import static java.lang.Math.abs;
 
 public class BasicSternhalma implements Game {
 
@@ -24,15 +26,14 @@ public class BasicSternhalma implements Game {
         if (!players.containsKey(player)) {
             int id = board.addPlayer();
             players.put(player, id);
-            for (Player p : players.keySet()) {
+            players.keySet().forEach(p -> {
                 p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn);
                 p.sendObject(board);
-            }
+            });
             return true;
         }
         return false;
     }
-
 
 
     @Override
@@ -45,11 +46,27 @@ public class BasicSternhalma implements Game {
             case "MOVE" -> {
                 String fromStr = tokens[1];
                 String toStr = tokens[2];
-                board.movePiece(new Point(Integer.parseInt(fromStr.split(",")[0]),Integer.parseInt(fromStr.split(",")[1])), new Point(Integer.parseInt(toStr.split(",")[0]),Integer.parseInt(toStr.split(",")[1])));
-                //System.out.println(new Point(Integer.parseInt(fromStr.split(",")[0]),Integer.parseInt(fromStr.split(",")[1])) + ":::" + new Point(Integer.parseInt(toStr.split(",")[0]),Integer.parseInt(toStr.split(",")[1])));
-                for (Player p : players.keySet()) {
-                    p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn);
-                    p.sendObject(board);
+                int oldX = Integer.parseInt(fromStr.split(",")[0]);
+                int oldY = Integer.parseInt(fromStr.split(",")[1]);
+                int newX = Integer.parseInt(toStr.split(",")[0]);
+                int newY = Integer.parseInt(toStr.split(",")[1]);
+                Point oldPoint = new Point(oldX, oldY);
+                Point newPoint = new Point(newX, newY);
+                if (
+                        (abs(oldX - newX) == 1 && abs(oldY - newY) == 1)
+                        || (abs(oldX - newX) == 2  && abs(oldY - newY) == 0)
+                        || board.canJump(oldPoint, newPoint, 2, 0)
+                        || board.canJump(oldPoint, newPoint, -2, 0)
+                        || board.canJump(oldPoint, newPoint, 1, 1)
+                        || board.canJump(oldPoint, newPoint, 1, -1)
+                        || board.canJump(oldPoint, newPoint, -1, 1)
+                        || board.canJump(oldPoint, newPoint, -1, -1)
+                ) {
+                    board.movePiece(oldPoint, newPoint);
+                    players.keySet().forEach(p -> {
+                        p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn);
+                        p.sendObject(board);
+                    });
                 }
             }
         }
