@@ -54,19 +54,26 @@ public class BasicSternhalma implements Game {
                 Point newPoint = new Point(newX, newY);
                 if (
                         (abs(oldX - newX) == 1 && abs(oldY - newY) == 1)
-                        || (abs(oldX - newX) == 2  && abs(oldY - newY) == 0)
-                        || board.canJump(oldPoint, newPoint, 2, 0)
-                        || board.canJump(oldPoint, newPoint, -2, 0)
-                        || board.canJump(oldPoint, newPoint, 1, 1)
-                        || board.canJump(oldPoint, newPoint, 1, -1)
-                        || board.canJump(oldPoint, newPoint, -1, 1)
-                        || board.canJump(oldPoint, newPoint, -1, -1)
+                                || (abs(oldX - newX) == 2 && abs(oldY - newY) == 0)
+                                || board.canJump(oldPoint, newPoint, 2, 0)
+                                || board.canJump(oldPoint, newPoint, -2, 0)
+                                || board.canJump(oldPoint, newPoint, 1, 1)
+                                || board.canJump(oldPoint, newPoint, 1, -1)
+                                || board.canJump(oldPoint, newPoint, -1, 1)
+                                || board.canJump(oldPoint, newPoint, -1, -1)
                 ) {
-                    board.movePiece(oldPoint, newPoint);
-                    players.keySet().forEach(p -> {
-                        p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn);
-                        p.sendObject(board);
-                    });
+                    int playerID = board.getPlayerIDAt(oldPoint);
+                    if (
+                            !(
+                                    board.getOpponentBasePoints(playerID).contains(oldPoint) &&
+                                            !(board.getOpponentBasePoints(playerID).contains(newPoint)))
+                    ) {
+                        board.movePiece(oldPoint, newPoint);
+                        players.keySet().forEach(p -> {
+                            p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn);
+                            p.sendObject(board);
+                        });
+                    }
                 }
             }
         }

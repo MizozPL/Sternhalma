@@ -22,8 +22,11 @@ public class Board implements Serializable {
     private static final HashSet<Point> bottomLeftBasePoints;
     private static final HashSet<Point> topLeftBasePoints;
 
+    private int[] opponents;
+
     public Board() {
         numberOfPlayers = 0;
+        opponents = null;
         piecesWithPosition = new HashMap<>();
     }
 
@@ -35,7 +38,6 @@ public class Board implements Serializable {
         bottomBasePoints = generateBottomBasePoints();
         bottomLeftBasePoints = generateBottomLeftBasePoints();
         topLeftBasePoints = generateTopLeftBasePoints();
-
     }
 
     public void movePiece(Point oldPosition, Point newPosition) {
@@ -56,8 +58,12 @@ public class Board implements Serializable {
         return validPoints.contains(point);
     }
 
-    public Piece getPieceAt(Point position) {
-        return piecesWithPosition.get(position);
+    public Piece getPieceAt(Point point) {
+        return piecesWithPosition.get(point);
+    }
+
+    public int getPlayerIDAt(Point point) {
+        return getPieceAt(point).getPlayerNumber();
     }
 
     public Set<Point> getValidPositions() {
@@ -76,6 +82,45 @@ public class Board implements Serializable {
             }
         });
         return playerPieces;
+    }
+
+    public int getOpponentBaseNumber(int playerID) {
+        return opponents[playerID - 1];
+    }
+
+    public Set<Point> getOpponentBasePoints(int playerID) {
+        int baseNumber = getOpponentBaseNumber(playerID);
+        switch (baseNumber) {
+            case 1 -> {
+                return topBasePoints;
+            }
+            case 2 -> {
+                return topRightBasePoints;
+            }
+            case 3 -> {
+                return bottomRightBasePoints;
+            }
+            case 4 -> {
+                return bottomBasePoints;
+            }
+            case 5 -> {
+                return bottomLeftBasePoints;
+            }
+            case 6 -> {
+                return topLeftBasePoints;
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + baseNumber);
+        }
+    }
+
+    private void setOpponents() {
+        this.opponents = switch (numberOfPlayers) {
+            case 2 -> new int[]{4, 1};
+            case 3 -> new int[]{3, 5, 1};
+            case 4 -> new int[]{4, 1, 5, 2};
+            case 6 -> new int[]{4, 1, 5, 2, 6, 3};
+            default -> throw new IllegalStateException("Unexpected value: " + numberOfPlayers);
+        };
     }
 
     private void clearBoard() {
@@ -233,6 +278,7 @@ public class Board implements Serializable {
                 clearBoard();
                 setPiecesAtPositionOne(1);
                 setPiecesAtPositionFour(2);
+                setOpponents();
             }
             case 3 -> {
                 clearBoard();
@@ -247,6 +293,7 @@ public class Board implements Serializable {
                 setPiecesAtPositionFour(2);
                 setPiecesAtPositionTwo(3);
                 setPiecesAtPositionFive(4);
+                setOpponents();
             }
             case 5 -> {
                 clearBoard();
@@ -264,6 +311,7 @@ public class Board implements Serializable {
                 setPiecesAtPositionFive(4);
                 setPiecesAtPositionThree(5);
                 setPiecesAtPositionSix(6);
+                setOpponents();
             }
             default -> {
                 throw new IllegalStateException("Invalid number of players.");
@@ -271,77 +319,4 @@ public class Board implements Serializable {
         }
         return numberOfPlayers;
     }
-//
-//    private void setPiecesAtPositionOne(int playerID) {
-//        int xMidPoint = 12;
-//        for (int i = 0; i < 4; i++) {
-//            for (int j = 0; j <= i; j++) {
-//                Point point = new Point(xMidPoint + j * 2, i);
-//                Piece piece = new Piece(playerID);
-//                piecesWithPosition.put(point, piece);
-//            }
-//            xMidPoint -= 1;
-//        }
-//
-//    }
-//
-//    private void setPiecesAtPositionThree(int playerID) {
-//        int xMidPoint = 21;
-//        for (int i = 9; i < 13; i++) {
-//            for (int j = 0; j <= i - 9; j++) {
-//                Point point = new Point(xMidPoint + j * 2, i);
-//                Piece piece = new Piece(playerID);
-//                piecesWithPosition.put(point, piece);
-//            }
-//            xMidPoint -= 1;
-//        }
-//    }
-//
-//    private void setPiecesAtPositionFive(int playerID) {
-//        int xMidPoint = 3;
-//        for (int i = 9; i < 13; i++) {
-//            for (int j = 0; j <= i - 9; j++) {
-//                Point point = new Point(xMidPoint + j * 2, i);
-//                Piece piece = new Piece(playerID);
-//                piecesWithPosition.put(point, piece);
-//            }
-//            xMidPoint -= 1;
-//        }
-//    }
-//
-//    private void setPiecesAtPositionFour(int playerID) {
-//        int xMidPoint = 12;
-//        for (int i = 16; i > 12; i--) {
-//            for (int j = 0; j <= 16 - i; j++) {
-//                Point point = new Point(xMidPoint + j * 2, i);
-//                Piece piece = new Piece(playerID);
-//                piecesWithPosition.put(point, piece);
-//            }
-//            xMidPoint -= 1;
-//        }
-//    }
-//
-//    private void setPiecesAtPositionTwo(int playerID) {
-//        int xMidPoint = 21;
-//        for (int i = 7; i >= 4; i--) {
-//            for (int j = 0; j <= 7 - i; j++) {
-//                Point point = new Point(xMidPoint + j * 2, i);
-//                Piece piece = new Piece(playerID);
-//                piecesWithPosition.put(point, piece);
-//            }
-//            xMidPoint -= 1;
-//        }
-//    }
-//
-//    private void setPiecesAtPositionSix(int playerID) {
-//        int xMidPoint = 3;
-//        for (int i = 7; i >= 4; i--) {
-//            for (int j = 0; j <= 7 - i; j++) {
-//                Point point = new Point(xMidPoint + j * 2, i);
-//                Piece piece = new Piece(playerID);
-//                piecesWithPosition.put(point, piece);
-//            }
-//            xMidPoint -= 1;
-//        }
-//    }
 }

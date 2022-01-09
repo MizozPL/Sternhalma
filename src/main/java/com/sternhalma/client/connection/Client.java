@@ -19,49 +19,49 @@ public class Client {
     private PrintWriter printWriter;
     private static final String GAME_NAME = "BasicSternhalma";
 
-    public Client(String address, int port, String gameID){
+    public Client(String address, int port, String gameID) {
         this.address = address;
         this.port = port;
         this.gameID = gameID;
-        clientFrame = new ClientFrame(address+":"+port);
+        clientFrame = new ClientFrame(address + ":" + port);
     }
 
     public String getGameID() {
         return gameID;
     }
 
-    public void connect(){
-        try(Socket socket = new Socket(InetAddress.getByName(address), port)){
+    public void connect() {
+        try (Socket socket = new Socket(InetAddress.getByName(address), port)) {
             objectInputStream = new ObjectInputStream(socket.getInputStream());
             printWriter = new PrintWriter(socket.getOutputStream(), true);
 
-            sendMessage("createGame:"+gameID+":"+GAME_NAME);
+            sendMessage("createGame:" + gameID + ":" + GAME_NAME);
             readObject();
-            sendMessage("joinGame:"+gameID);
+            sendMessage("joinGame:" + gameID);
             Object response = readObject();
-            if(!(response instanceof String)) {
+            if (!(response instanceof String)) {
                 throw new IllegalStateException();
             }
             String responseString = (String) response;
-            if(responseString.equals("Not joined")) {
+            if (responseString.equals("Not joined")) {
                 throw new IllegalStateException();
             }
 
             Game instance = GameFactory.creteGameInstance(GAME_NAME);
             instance.init(this);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         objectInputStream = null;
         printWriter = null;
     }
 
-    public ClientFrame getClientFrame(){
+    public ClientFrame getClientFrame() {
         return clientFrame;
     }
 
-    public void sendMessage(String message){
-        synchronized(printWriter) {
+    public void sendMessage(String message) {
+        synchronized (printWriter) {
             if (printWriter == null) {
                 throw new IllegalStateException();
             }
@@ -69,7 +69,7 @@ public class Client {
         }
     }
 
-    public Object readObject(){
+    public Object readObject() {
         synchronized (objectInputStream) {
             if (objectInputStream == null) {
                 throw new IllegalStateException();
