@@ -13,8 +13,8 @@ public class BasicSternhalma implements Game {
 
     @Override
     public void init(Client client) {
-        panel = new BasicSternhalmaPanel(this);
         this.client = client;
+        panel = new BasicSternhalmaPanel(this);
         this.client.getClientFrame().setGamePanel(panel);
         Object object;
         while(true){
