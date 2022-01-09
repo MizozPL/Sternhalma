@@ -14,9 +14,8 @@ public class BoardPanel extends JPanel implements MouseListener {
     private Point selectedPosition = null;
     private final BasicSternhalma basicSternhalma;
 
-    private static final int SIZE = 20;
-    private static final int SCALEX = 20;
-    private static final int SCALEY = 30;
+    private static final double DOT_SIZE = 0.9;
+
 
     public BoardPanel(BasicSternhalma basicSternhalma) {
         board = new Board();
@@ -44,13 +43,14 @@ public class BoardPanel extends JPanel implements MouseListener {
         if(selectedPosition != null) {
             g2d.setColor(Color.BLACK);
             g2d.setStroke(new BasicStroke(3));
-            g2d.drawOval(SCALEX * selectedPosition.x, SCALEY * selectedPosition.y, SIZE, SIZE);
+            Point p = scaleCoords(selectedPosition);
+            g2d.drawOval(p.x, p.y, scaleSize(), scaleSize());
         }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        Point point = new Point(e.getX() / SCALEX, e.getY() / SCALEY);
+        Point point = unscaleCords(e.getPoint());
         if (board.getPieceAt(point) != null) {
             selectedPosition = point;
         } else {
@@ -65,14 +65,45 @@ public class BoardPanel extends JPanel implements MouseListener {
     private void drawAllValidSpots(Graphics2D g2d, Color color) {
         g2d.setColor(color);
         for (Point point : board.getValidPositions()) {
-            g2d.fillOval(SCALEX * point.x, SCALEY * point.y, SIZE, SIZE);
+            Point p = scaleCoords(point);
+            g2d.fillOval(p.x, p.y, scaleSize(), scaleSize());
         }
     }
 
     private void drawPlayerPieces(Graphics2D g2d, int playerID, Color color) {
         g2d.setColor(color);
-        for (Point point : board.getPlayerPiecesCoordinates(playerID))
-            g2d.fillOval(SCALEX * point.x, SCALEY * point.y, SIZE, SIZE);
+        for (Point point : board.getPlayerPiecesCoordinates(playerID)) {
+            Point p = scaleCoords(point);
+            g2d.fillOval(p.x, p.y, scaleSize(), scaleSize());
+        }
+    }
+
+    private Point scaleCoords(Point p){
+        int min = getScale();
+        Point ret = new Point((int)(p.x * min / Board.BOARD_X) + getHorizontalOffset(), (int)(p.y * min / Board.BOARD_Y) + getVerticalOffset());
+        return ret;
+    }
+
+    private Point unscaleCords(Point p) {
+        int min = getScale();
+        Point ret = new Point((int)((p.x - getHorizontalOffset())* Board.BOARD_X / min), (int)((p.y - getVerticalOffset()) * Board.BOARD_Y / min));
+        return ret;
+    }
+
+    private int getScale() {
+        return (int) Math.min(getWidth(), getHeight());
+    }
+
+    private int scaleSize(){
+        return (int) (getScale() * DOT_SIZE / Math.max(Board.BOARD_X, Board.BOARD_Y));
+    }
+
+    private int getVerticalOffset(){
+        return (getHeight() - getScale()) / 2;
+    }
+
+    private int getHorizontalOffset(){
+        return (getWidth() - getScale()) / 2;
     }
 
     @Override

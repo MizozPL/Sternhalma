@@ -33,4 +33,8 @@ public class BasicSternhalma implements Game {
     public void movePiece(Point from, Point to){
         client.sendMessage("performAction:"+ client.getGameID() +":MOVE:"+from.x+","+from.y+":"+to.x+","+to.y);
     }
+
+    public void endTurn(){
+        client.sendMessage("performAction:"+ client.getGameID() +":ENDTURN");
+    }
 }

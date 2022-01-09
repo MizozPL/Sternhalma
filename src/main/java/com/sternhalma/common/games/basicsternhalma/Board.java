@@ -8,6 +8,9 @@ import java.util.Set;
 
 public class Board implements Serializable {
 
+    public static final int BOARD_X = 25;
+    public static final int BOARD_Y = 17;
+
     private int numberOfPlayers;
     private final HashMap<Point, Piece> piecesWithPosition;
     private static final HashSet<Point> validPoints;

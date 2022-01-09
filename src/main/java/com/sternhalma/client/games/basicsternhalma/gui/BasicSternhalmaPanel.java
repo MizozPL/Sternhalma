@@ -14,7 +14,7 @@ public class BasicSternhalmaPanel extends JPanel {
     public BasicSternhalmaPanel(BasicSternhalma basicSternhalma) {
         setLayout(new BorderLayout());
         boardPanel = new BoardPanel(basicSternhalma);
-        infoPanel = new InfoPanel();
+        infoPanel = new InfoPanel(basicSternhalma);
         add(boardPanel, BorderLayout.CENTER);
         add(infoPanel, BorderLayout.NORTH);
     }
