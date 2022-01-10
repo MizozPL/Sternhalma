@@ -63,9 +63,14 @@ public class Player implements Runnable {
 
     }
 
+    public synchronized boolean isAlive() {
+        return objectOutputStream != null;
+    }
+
     public synchronized void sendObject(Object data) {
         if (objectOutputStream == null) {
-            throw new IllegalStateException();
+            //throw new IllegalStateException();
+            return;
         }
         try {
             objectOutputStream.reset();

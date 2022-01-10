@@ -20,8 +20,13 @@ public class BasicSternhalma implements Game {
         this.client.getClientFrame().setGamePanel(panel);
         Object object;
         while (true) {
-            object = client.readObject();
-
+            try {
+                object = client.readObject();
+            } catch(Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(client.getClientFrame(), "Internal error!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             if (object instanceof Board) {
                 Board board = (Board) object;
                 panel.setBoard(board);
@@ -42,7 +47,6 @@ public class BasicSternhalma implements Game {
 
                                 int controlNumber = turn % playerNum;
                                 int realTurn = (controlNumber == 0 ? playerNum : controlNumber);
-                                System.out.println(playerID + " " + turn);
                                 panel.setPlayerID(playerID);
                                 panel.setTurn(realTurn);
                                 panel.repaint();
@@ -63,6 +67,10 @@ public class BasicSternhalma implements Game {
                     }
                     case NetworkMessages.GAME_END -> {
                         JOptionPane.showMessageDialog(client.getClientFrame(), "Game ended!", "Information", JOptionPane.INFORMATION_MESSAGE);
+                        return; //disconnect
+                    }
+                    case NetworkMessages.GAME_END_PLAYER_DISCONNECTED -> {
+                        JOptionPane.showMessageDialog(client.getClientFrame(), "Player got disconnected, game ended!", "Information", JOptionPane.INFORMATION_MESSAGE);
                         return; //disconnect
                     }
                 }

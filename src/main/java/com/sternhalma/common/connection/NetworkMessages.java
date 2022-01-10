@@ -22,6 +22,7 @@ public class NetworkMessages {
     public static final String BAD_PIECE = "BAD_PIECE";
     public static final String WINNER = "WINNER";
     public static final String GAME_END = "GAME_END";
+    public static final String GAME_END_PLAYER_DISCONNECTED = "GAME_END_PLAYER_DISCONNECTED";
 
     private NetworkMessages() {
     }

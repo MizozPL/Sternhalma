@@ -43,6 +43,7 @@ public class GameManager {
     public synchronized void joinGame(Player player, String gameID) {
         if (games.containsKey(gameID)) {
             games.get(gameID).joinPlayer(player);
+            return;
         }
         player.sendMessage(NetworkMessages.GAME_WITH_ID_DOES_NOT_EXIST);
     }

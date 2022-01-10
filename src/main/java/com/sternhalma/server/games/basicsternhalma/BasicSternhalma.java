@@ -35,6 +35,15 @@ public class BasicSternhalma implements Game {
 
     @Override
     public void joinPlayer(Player player) {
+        if(!checkPlayersConnected()) {
+            player.sendMessage(NetworkMessages.GAME_END_PLAYER_DISCONNECTED);
+            return;
+        }
+
+        if(gameFinished) {
+            player.sendMessage(NetworkMessages.GAME_END);
+        }
+
         if (players.size() >= 6) {
             player.sendMessage(NetworkMessages.GAME_FULL);
             return;
@@ -62,6 +71,9 @@ public class BasicSternhalma implements Game {
 
     @Override
     public void performAction(Player player, String action) {
+        if(!checkPlayersConnected())
+            return;
+
         if (gameFinished) {
             player.sendMessage(NetworkMessages.GAME_END);
         }
@@ -209,6 +221,19 @@ public class BasicSternhalma implements Game {
         players.keySet().forEach(p -> {
             p.sendMessage(NetworkMessages.GAME_END);
         });
+    }
+
+    private boolean checkPlayersConnected(){
+        for(Player p : players.keySet()) {
+            if(!p.isAlive()) {
+                players.keySet().forEach(p2 -> {
+                    p2.sendMessage(NetworkMessages.GAME_END_PLAYER_DISCONNECTED);
+                });
+                gameFinished = true;
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

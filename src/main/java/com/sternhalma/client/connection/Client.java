@@ -54,6 +54,10 @@ public class Client {
         }
         sendMessage(NetworkMessages.JOIN_GAME + ":" + gameID);
         response = readObject();
+        if(NetworkMessages.GAME_END_PLAYER_DISCONNECTED.equals(response)){
+            JOptionPane.showMessageDialog(clientFrame, "Player got disconnected, game ended!", "Information", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         if (!GAME_NAME.equals(response)) {
             JOptionPane.showMessageDialog(clientFrame, "Error joining game!\nRestart client...", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -71,19 +75,19 @@ public class Client {
     }
 
     public void sendMessage(String message) {
+        if (printWriter == null) {
+            throw new IllegalStateException();
+        }
         synchronized (printWriter) {
-            if (printWriter == null) {
-                throw new IllegalStateException();
-            }
             printWriter.println(message);
         }
     }
 
     public Object readObject() {
+        if (objectInputStream == null) {
+            throw new IllegalStateException();
+        }
         synchronized (objectInputStream) {
-            if (objectInputStream == null) {
-                throw new IllegalStateException();
-            }
             try {
                 return objectInputStream.readObject();
             } catch (IOException | ClassNotFoundException e) {
