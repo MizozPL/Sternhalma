@@ -33,16 +33,16 @@ public class Player implements Runnable {
                     case "createGame" -> {
                         String gameID = tokens[1];
                         String gameType = tokens[2];
-                        sendMessage(GameManager.getInstance().createGame(gameID, gameType));
+                        GameManager.getInstance().createGame(this, gameID, gameType);
                     }
                     case "joinGame" -> {
                         String gameID = tokens[1];
-                        sendMessage(GameManager.getInstance().joinGame(this, gameID));
+                        GameManager.getInstance().joinGame(this, gameID);
                     }
                     case "performAction" -> {
                         String gameID = tokens[1];
                         String action = tokens[2];
-                        sendMessage(GameManager.getInstance().performAction(this, gameID, action));
+                        GameManager.getInstance().performAction(this, gameID, action);
                     }
                     default -> {
                         sendMessage("Bad request!");

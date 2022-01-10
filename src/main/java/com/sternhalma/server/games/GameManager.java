@@ -19,27 +19,33 @@ public class GameManager {
         return instance;
     }
 
-    public synchronized String createGame(String gameID, String gameType) {
-        if (games.containsKey(gameID))
-            return "Game with id: " + gameID + "already exists!";
+    public synchronized void createGame(Player player, String gameID, String gameType) {
+        if (games.containsKey(gameID)) {
+            player.sendMessage("Game with id: " + gameID + "already exists!");
+            return;
+        }
         Game game = factory.createGame(gameType);
-        if (game == null)
-            return "No such game!";
+        if (game == null) {
+            player.sendMessage("No such game!");
+            return;
+        }
         games.put(gameID, game);
-        return "Game created!";
+        player.sendMessage("Game created!");
     }
 
-    public synchronized String performAction(Player player, String gameID, String action) {
+    public synchronized void performAction(Player player, String gameID, String action) {
         if (games.containsKey(gameID)) {
-            return games.get(gameID).performAction(player, action) ? "Action performed" : "Action not performed";
+            games.get(gameID).performAction(player, action);
+            return;
         }
-        return "Action not performed";
+        player.sendMessage("INVALID");
     }
 
-    public synchronized String joinGame(Player player, String gameID) {
+    public synchronized void joinGame(Player player, String gameID) {
         if (games.containsKey(gameID)) {
-            return games.get(gameID).joinPlayer(player) ? games.get(gameID).getGameName() : "Not joined";
+            if(!games.get(gameID).joinPlayer(player)) {
+                player.sendMessage("Not joined");
+            }
         }
-        return "Not joined";
     }
 }

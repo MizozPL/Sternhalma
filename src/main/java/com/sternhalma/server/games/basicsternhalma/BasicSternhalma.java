@@ -22,10 +22,11 @@ public class BasicSternhalma implements Game {
     @Override
     public boolean joinPlayer(Player player) {
         if (!players.containsKey(player)) {
+            player.sendMessage(getGameName());
             int id = board.addPlayer();
             players.put(player, id);
             players.keySet().forEach(p -> {
-                p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn);
+                p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn + ":" + board.getNumberOfPlayers());
                 p.sendObject(board);
             });
             return true;
@@ -63,7 +64,7 @@ public class BasicSternhalma implements Game {
                         ) {
                             board.movePiece(oldPoint, newPoint);
                             players.keySet().forEach(p -> {
-                                p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn);
+                                p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn + ":" + board.getNumberOfPlayers());
                                 p.sendObject(board);
                             });
                         }
@@ -71,6 +72,10 @@ public class BasicSternhalma implements Game {
                 }
                 case "ENDTURN" -> {
                     turn++;
+                    players.keySet().forEach(p -> {
+                        p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn + ":" + board.getNumberOfPlayers());
+                        p.sendObject(board);
+                    });
                 }
             }
         }

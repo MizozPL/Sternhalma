@@ -22,4 +22,12 @@ public class BasicSternhalmaPanel extends JPanel {
     public void setBoard(Board board) {
         boardPanel.setBoard(board);
     }
+
+    public void setPlayerID(int playerID) {
+        infoPanel.setPlayerID(playerID);
+    }
+
+    public void setTurn(int turn) {
+        infoPanel.setTurn(turn);
+    }
 }

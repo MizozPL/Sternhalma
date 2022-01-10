@@ -25,6 +25,28 @@ public class BasicSternhalma implements Game {
                 continue;
             }
             if(object instanceof String) {
+                String message = (String) object;
+                String tokens[] = message.split(":");
+                switch(tokens[0]) {
+                    case "BOARD_UPDATE" -> {
+                        if(tokens.length > 3){
+                            try {
+                                int playerID = Integer.parseInt(tokens[1]);
+                                int turn = Integer.parseInt(tokens[2]);
+                                int playerNum = Integer.parseInt(tokens[3]);
+
+                                int controlNumber = turn % playerNum;
+                                int realTurn = (controlNumber == 0 ? playerNum : controlNumber);
+
+                                panel.setPlayerID(playerID);
+                                panel.setTurn(realTurn);
+                                panel.repaint();
+                            } catch (NumberFormatException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }
                 //TODO: Handle Messages
             }
         }
