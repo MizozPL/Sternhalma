@@ -57,6 +57,8 @@ public class BasicSternhalma implements Game {
                     int newY = Integer.parseInt(toStr.split(",")[1]);
                     Point oldPoint = new Point(oldX, oldY);
                     Point newPoint = new Point(newX, newY);
+                    if(players.get(player) != board.getPlayerIDAt(oldPoint))
+                        return false;
                     if (
                             board.isValidMove(oldPoint, newPoint) || board.isValidJump(oldPoint, newPoint)
                     ) {
