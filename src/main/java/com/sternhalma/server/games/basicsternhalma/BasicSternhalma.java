@@ -3,6 +3,7 @@ package com.sternhalma.server.games.basicsternhalma;
 import com.sternhalma.common.games.basicsternhalma.Board;
 import com.sternhalma.server.connection.Player;
 import com.sternhalma.server.games.Game;
+import com.sternhalma.server.games.GameManager;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -89,8 +90,10 @@ public class BasicSternhalma implements Game {
                     if(board.getWinners().size() == board.getNumberOfPlayers()) {
                         players.keySet().forEach(p -> {
                             p.sendMessage("GAME_ENDED");
+                            p.disconnect();
                         });
-                        //TODO: Remove game instance and disconnect players
+                        //na razie nie usuwamy gier...
+                        //GameManager.getInstance().removeGame();
                         return true;
                     }
                     do {

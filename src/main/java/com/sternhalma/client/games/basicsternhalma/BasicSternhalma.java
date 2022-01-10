@@ -59,19 +59,20 @@ public class BasicSternhalma implements Game {
                     }
                     case "GAME_ENDED" -> {
                         JOptionPane.showMessageDialog(client.getClientFrame(),"Game ended!", "Information", JOptionPane.INFORMATION_MESSAGE);
-                        //TODO: Disconnect from server
+                        return; //disconnect
                     }
                 }
-                //TODO: Handle Messages
             }
         }
     }
 
     public void movePiece(Point from, Point to){
-        client.sendMessage("performAction:"+ client.getGameID() +":MOVE:"+from.x+","+from.y+":"+to.x+","+to.y);
+        if(client.isConnected())
+            client.sendMessage("performAction:"+ client.getGameID() +":MOVE:"+from.x+","+from.y+":"+to.x+","+to.y);
     }
 
     public void endTurn(){
-        client.sendMessage("performAction:"+ client.getGameID() +":ENDTURN");
+        if(client.isConnected())
+            client.sendMessage("performAction:"+ client.getGameID() +":ENDTURN");
     }
 }

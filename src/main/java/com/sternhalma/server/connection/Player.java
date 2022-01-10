@@ -12,6 +12,7 @@ public class Player implements Runnable {
     //private PrintWriter output;
     private Scanner input;
     private ObjectOutputStream objectOutputStream;
+    private volatile boolean connected = false;
 
     public Player(Socket socket) {
         this.playerSocket = socket;
@@ -24,7 +25,10 @@ public class Player implements Runnable {
             //output = new PrintWriter(playerSocket.getOutputStream(), true);
             input = new Scanner(playerSocket.getInputStream());
             objectOutputStream = new ObjectOutputStream(playerSocket.getOutputStream());
+            connected = true;
             while (input.hasNextLine()) {
+                if(!connected)
+                    break;
                 String line = input.nextLine();
                 String[] tokens = line.split(":", 3);
                 String request = tokens[0];
@@ -52,6 +56,7 @@ public class Player implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+            connected = false;
             try {
                 playerSocket.close();
             } catch (IOException e) {
@@ -73,6 +78,10 @@ public class Player implements Runnable {
         } catch (IOException e){
             //TODO
         }
+    }
+
+    public void disconnect(){
+        connected = false;
     }
 
     //Nie musi być synchronized bo korzysta z sendObject

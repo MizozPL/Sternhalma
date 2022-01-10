@@ -18,6 +18,7 @@ public class Client {
     private ObjectInputStream objectInputStream;
     private PrintWriter printWriter;
     private static final String GAME_NAME = "BasicSternhalma";
+    private volatile boolean connected = false;
 
     public Client(String address, int port, String gameID) {
         this.address = address;
@@ -32,6 +33,7 @@ public class Client {
 
     public void connect() {
         try (Socket socket = new Socket(InetAddress.getByName(address), port)) {
+            connected = true;
             objectInputStream = new ObjectInputStream(socket.getInputStream());
             printWriter = new PrintWriter(socket.getOutputStream(), true);
 
@@ -52,8 +54,13 @@ public class Client {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        connected = false;
         objectInputStream = null;
         printWriter = null;
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 
     public ClientFrame getClientFrame() {
