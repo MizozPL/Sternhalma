@@ -5,6 +5,7 @@ import com.sternhalma.client.games.Game;
 import com.sternhalma.client.games.basicsternhalma.gui.BasicSternhalmaPanel;
 import com.sternhalma.common.games.basicsternhalma.Board;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class BasicSternhalma implements Game {
@@ -45,6 +46,20 @@ public class BasicSternhalma implements Game {
                                 ex.printStackTrace();
                             }
                         }
+                    }
+                    case "WINNER" -> {
+                        if(tokens.length > 1){
+                            try {
+                                int playerID = Integer.parseInt(tokens[1]);
+                                JOptionPane.showMessageDialog(client.getClientFrame(),"Player " + playerID + "ended the game!", "Information", JOptionPane.INFORMATION_MESSAGE);
+                            } catch (NumberFormatException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                    case "GAME_ENDED" -> {
+                        JOptionPane.showMessageDialog(client.getClientFrame(),"Game ended!", "Information", JOptionPane.INFORMATION_MESSAGE);
+                        //TODO: Disconnect from server
                     }
                 }
                 //TODO: Handle Messages

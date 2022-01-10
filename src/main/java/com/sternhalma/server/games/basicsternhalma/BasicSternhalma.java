@@ -36,8 +36,12 @@ public class BasicSternhalma implements Game {
 
     private boolean isPlayersTurn(Player player) {
         int playerID = players.get(player);
+        return playerID == getPlayerIDFromTurn(turn);
+    }
+
+    private int getPlayerIDFromTurn(int turn) {
         int controlNumber = turn % board.getNumberOfPlayers();
-        return playerID == (controlNumber == 0 ? board.getNumberOfPlayers() : controlNumber);
+        return (controlNumber == 0 ? board.getNumberOfPlayers() : controlNumber);
     }
 
     @Override
@@ -74,15 +78,29 @@ public class BasicSternhalma implements Game {
                     }
                 }
                 case "ENDTURN" -> {
-                    turn++;
+                    int playerID = players.get(player);
+                    if (!board.getWinners().contains(playerID) && board.checkForWin(playerID)) {
+                        board.addWinner(playerID);
+                        players.keySet().forEach(p -> {
+                            p.sendMessage("WINNER:" + playerID);
+                            p.sendObject(board);
+                        });
+                    }
+                    if(board.getWinners().size() == board.getNumberOfPlayers()) {
+                        players.keySet().forEach(p -> {
+                            p.sendMessage("GAME_ENDED");
+                        });
+                        //TODO: Remove game instance and disconnect players
+                        return true;
+                    }
+                    do {
+                        turn++;
+                    }
+                    while(board.getWinners().contains(getPlayerIDFromTurn(turn)));
                     players.keySet().forEach(p -> {
                         p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn + ":" + board.getNumberOfPlayers());
                         p.sendObject(board);
                     });
-                    int playerID = players.get(player);
-                    if (!board.getWinners().contains(playerID) && board.checkForWin(playerID)) {
-                        board.addWinner(playerID);
-                    }
                 }
             }
         }
