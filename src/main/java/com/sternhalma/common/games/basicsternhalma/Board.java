@@ -81,6 +81,10 @@ public class Board implements Serializable {
         return validPoints.contains(point);
     }
 
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
     public Piece getPieceAt(Point point) {
         return piecesWithPosition.get(point);
     }

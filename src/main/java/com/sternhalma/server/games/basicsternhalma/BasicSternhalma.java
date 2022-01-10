@@ -33,35 +33,44 @@ public class BasicSternhalma implements Game {
         return false;
     }
 
+    private boolean isPlayersTurn(Player player) {
+        int playerID = players.get(player);
+        int controlNumber = turn % board.getNumberOfPlayers();
+        return playerID == (controlNumber == 0 ? board.getNumberOfPlayers() : controlNumber);
+    }
 
     @Override
     public boolean performAction(Player player, String action) {
-        //TODO: Na razie po prostu wykonajmy pojedyńczą akcję przesunięcia pionka z punktu A do punktu B
         //MOVE:4,0:4,2
         String[] tokens = action.split(":", 3);
         String command = tokens[0];
-        switch (command) {
-            case "MOVE" -> {
-                String fromStr = tokens[1];
-                String toStr = tokens[2];
-                int oldX = Integer.parseInt(fromStr.split(",")[0]);
-                int oldY = Integer.parseInt(fromStr.split(",")[1]);
-                int newX = Integer.parseInt(toStr.split(",")[0]);
-                int newY = Integer.parseInt(toStr.split(",")[1]);
-                Point oldPoint = new Point(oldX, oldY);
-                Point newPoint = new Point(newX, newY);
-                if (
-                        board.isValidMove(oldPoint, newPoint) || board.isValidJump(oldPoint, newPoint)
-                ) {
+        if (isPlayersTurn(player)) {
+            switch (command) {
+                case "MOVE" -> {
+                    String fromStr = tokens[1];
+                    String toStr = tokens[2];
+                    int oldX = Integer.parseInt(fromStr.split(",")[0]);
+                    int oldY = Integer.parseInt(fromStr.split(",")[1]);
+                    int newX = Integer.parseInt(toStr.split(",")[0]);
+                    int newY = Integer.parseInt(toStr.split(",")[1]);
+                    Point oldPoint = new Point(oldX, oldY);
+                    Point newPoint = new Point(newX, newY);
                     if (
-                            !board.isLeavingOpponentBase(oldPoint, newPoint)
+                            board.isValidMove(oldPoint, newPoint) || board.isValidJump(oldPoint, newPoint)
                     ) {
-                        board.movePiece(oldPoint, newPoint);
-                        players.keySet().forEach(p -> {
-                            p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn);
-                            p.sendObject(board);
-                        });
+                        if (
+                                !board.isLeavingOpponentBase(oldPoint, newPoint)
+                        ) {
+                            board.movePiece(oldPoint, newPoint);
+                            players.keySet().forEach(p -> {
+                                p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn);
+                                p.sendObject(board);
+                            });
+                        }
                     }
+                }
+                case "ENDTURN" -> {
+                    turn++;
                 }
             }
         }
