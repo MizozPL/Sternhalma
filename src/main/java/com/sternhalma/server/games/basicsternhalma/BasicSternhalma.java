@@ -44,7 +44,8 @@ public class BasicSternhalma implements Game {
         //MOVE:4,0:4,2
         String[] tokens = action.split(":", 3);
         String command = tokens[0];
-        if (isPlayersTurn(player)) {
+        int numberOfPlayers = board.getNumberOfPlayers();
+        if (isPlayersTurn(player) && (numberOfPlayers != 1 && numberOfPlayers != 5)) {
             switch (command) {
                 case "MOVE" -> {
                     String fromStr = tokens[1];

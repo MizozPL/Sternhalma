@@ -24,7 +24,7 @@ public class Board implements Serializable {
     private static final HashSet<Point> bottomLeftBasePoints;
     private static final HashSet<Point> topLeftBasePoints;
 
-    private Set<Integer> winners;
+    private final Set<Integer> winners;
     private int[] opponents;
 
     public Board() {
