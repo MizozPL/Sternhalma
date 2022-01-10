@@ -27,9 +27,13 @@ public class Board implements Serializable {
     private final Set<Integer> winners;
     private int[] opponents;
 
+    private Point lastMoveDestination;
+    private boolean isLastMoveJump;
+
     public Board() {
         numberOfPlayers = 0;
         opponents = null;
+        lastMoveDestination = null;
         piecesWithPosition = new HashMap<>();
         winners = new HashSet<>();
     }

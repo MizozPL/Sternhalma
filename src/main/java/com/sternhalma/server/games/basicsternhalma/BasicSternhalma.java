@@ -15,12 +15,16 @@ public class BasicSternhalma implements Game {
     private final Board board;
     private int turn;
     private boolean gameFinished;
+    private Point lastPieceMovedLocation;
+    private boolean isLastMoveJump;
 
     public BasicSternhalma() {
         players = new HashMap<>();
         board = new Board();
         turn = 1;
         gameFinished = false;
+        isLastMoveJump = false;
+        lastPieceMovedLocation = null;
     }
 
     @Override
@@ -88,12 +92,36 @@ public class BasicSternhalma implements Game {
                     return;
                 }
 
-                if (board.isValidMove(oldPoint, newPoint) || board.isValidJump(oldPoint, newPoint)) {
-                    if (!board.isLeavingOpponentBase(oldPoint, newPoint)) {
-                        board.movePiece(oldPoint, newPoint);
-                        broadcastBoardUpdate();
+                if (lastPieceMovedLocation != null) {
+                    if (!lastPieceMovedLocation.equals(oldPoint)) {
+                        return;
+                    }
+
+                    if (!isLastMoveJump) {
+                        return;
+                    }
+
+                    if (board.isValidJump(oldPoint, newPoint)) {
+                        if (!board.isLeavingOpponentBase(oldPoint, newPoint)) {
+                            board.movePiece(oldPoint, newPoint);
+                            lastPieceMovedLocation = newPoint;
+                            isLastMoveJump = true;
+                            broadcastBoardUpdate();
+
+                        }
+                    }
+
+                } else {
+                    if (board.isValidMove(oldPoint, newPoint) || board.isValidJump(oldPoint, newPoint)) {
+                        if (!board.isLeavingOpponentBase(oldPoint, newPoint)) {
+                            isLastMoveJump = board.isValidJump(oldPoint, newPoint);
+                            lastPieceMovedLocation = newPoint;
+                            board.movePiece(oldPoint, newPoint);
+                            broadcastBoardUpdate();
+                        }
                     }
                 }
+
             }
 
             case NetworkMessages.END_TURN -> {
@@ -107,6 +135,8 @@ public class BasicSternhalma implements Game {
                     broadcastGameEnd();
                     return;
                 }
+                lastPieceMovedLocation = null;
+                isLastMoveJump = false;
                 do {
                     turn++;
                 }
