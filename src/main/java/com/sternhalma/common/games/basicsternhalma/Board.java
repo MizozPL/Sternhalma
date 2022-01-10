@@ -24,12 +24,14 @@ public class Board implements Serializable {
     private static final HashSet<Point> bottomLeftBasePoints;
     private static final HashSet<Point> topLeftBasePoints;
 
+    private final Set<Integer> winners;
     private int[] opponents;
 
     public Board() {
         numberOfPlayers = 0;
         opponents = null;
         piecesWithPosition = new HashMap<>();
+        winners = new HashSet<>();
     }
 
     static {
@@ -63,8 +65,8 @@ public class Board implements Serializable {
 
     public boolean isLeavingOpponentBase(Point oldPoint, Point newPoint) {
         int playerID = this.getPlayerIDAt(oldPoint);
-        return this.getOpponentBasePoints(playerID).contains(oldPoint) &&
-                !(this.getOpponentBasePoints(playerID).contains(newPoint));
+        return this.getOpponentBaseCoordinates(playerID).contains(oldPoint) &&
+                !(this.getOpponentBaseCoordinates(playerID).contains(newPoint));
 
     }
 
@@ -79,6 +81,14 @@ public class Board implements Serializable {
 
     public boolean isValidPoint(Point point) {
         return validPoints.contains(point);
+    }
+
+    public Set<Integer> getWinners() {
+        return winners;
+    }
+
+    public void addWinner(int playerID) {
+        this.winners.add(playerID);
     }
 
     public int getNumberOfPlayers() {
@@ -115,7 +125,7 @@ public class Board implements Serializable {
         return opponents[playerID - 1];
     }
 
-    public Set<Point> getOpponentBasePoints(int playerID) {
+    public Set<Point> getOpponentBaseCoordinates(int playerID) {
         int baseNumber = getOpponentBaseNumber(playerID);
         switch (baseNumber) {
             case 1 -> {
@@ -346,4 +356,10 @@ public class Board implements Serializable {
         }
         return numberOfPlayers;
     }
+
+    public boolean checkForWin(int playerID) {
+        return getPlayerPiecesCoordinates(playerID)
+                .equals(getOpponentBaseCoordinates(playerID));
+    }
+
 }
