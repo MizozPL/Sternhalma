@@ -41,7 +41,7 @@ public class BoardPanel extends JPanel implements MouseListener {
         drawPlayerPieces(g2d, 4, Piece.getColorForPlayerWithID(4));
         drawPlayerPieces(g2d, 5, Piece.getColorForPlayerWithID(5));
         drawPlayerPieces(g2d, 6, Piece.getColorForPlayerWithID(6));
-        if(selectedPosition != null) {
+        if (selectedPosition != null) {
             g2d.setColor(Color.BLACK);
             g2d.setStroke(new BasicStroke(3));
             Point p = scaleCoords(selectedPosition);
@@ -79,15 +79,15 @@ public class BoardPanel extends JPanel implements MouseListener {
         }
     }
 
-    private Point scaleCoords(Point p){
+    private Point scaleCoords(Point p) {
         int min = getScale();
-        Point ret = new Point((int)(p.x * min / Board.BOARD_X) + getHorizontalOffset(), (int)(p.y * min / Board.BOARD_Y) + getVerticalOffset());
+        Point ret = new Point((int) (p.x * min / Board.BOARD_X) + getHorizontalOffset(), (int) (p.y * min / Board.BOARD_Y) + getVerticalOffset());
         return ret;
     }
 
     private Point unscaleCords(Point p) {
         int min = getScale();
-        Point ret = new Point((int)((p.x - getHorizontalOffset())* Board.BOARD_X / min), (int)((p.y - getVerticalOffset()) * Board.BOARD_Y / min));
+        Point ret = new Point((int) ((p.x - getHorizontalOffset()) * Board.BOARD_X / min), (int) ((p.y - getVerticalOffset()) * Board.BOARD_Y / min));
         return ret;
     }
 
@@ -95,15 +95,15 @@ public class BoardPanel extends JPanel implements MouseListener {
         return (int) Math.min(getWidth(), getHeight());
     }
 
-    private int scaleSize(){
+    private int scaleSize() {
         return (int) (getScale() * DOT_SIZE / Math.max(Board.BOARD_X, Board.BOARD_Y));
     }
 
-    private int getVerticalOffset(){
+    private int getVerticalOffset() {
         return (getHeight() - getScale()) / 2;
     }
 
-    private int getHorizontalOffset(){
+    private int getHorizontalOffset() {
         return (getWidth() - getScale()) / 2;
     }
 

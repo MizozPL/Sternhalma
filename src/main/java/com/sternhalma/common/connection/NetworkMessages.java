@@ -23,5 +23,6 @@ public class NetworkMessages {
     public static final String WINNER = "WINNER";
     public static final String GAME_END = "GAME_END";
 
-    private NetworkMessages() {}
+    private NetworkMessages() {
+    }
 }

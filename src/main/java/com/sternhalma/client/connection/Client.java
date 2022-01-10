@@ -48,18 +48,18 @@ public class Client {
     private void createGameInstance() {
         sendMessage(NetworkMessages.CREATE_GAME + ":" + gameID + ":" + GAME_NAME);
         Object response = readObject();
-        if(!(response instanceof String) || NetworkMessages.BAD_GAME_TYPE.equals(response)) {
+        if (!(response instanceof String) || NetworkMessages.BAD_GAME_TYPE.equals(response)) {
             JOptionPane.showMessageDialog(clientFrame, "Error joining game!\nRestart client...", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         sendMessage(NetworkMessages.JOIN_GAME + ":" + gameID);
         response = readObject();
-        if(!GAME_NAME.equals(response)) {
+        if (!GAME_NAME.equals(response)) {
             JOptionPane.showMessageDialog(clientFrame, "Error joining game!\nRestart client...", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         Game instance = GameFactory.creteGameInstance(GAME_NAME);
-        if(instance == null) {
+        if (instance == null) {
             JOptionPane.showMessageDialog(clientFrame, "Error creating local game instance!\nRestart client...", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }

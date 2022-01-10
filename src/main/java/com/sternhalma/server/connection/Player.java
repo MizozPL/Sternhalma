@@ -70,7 +70,7 @@ public class Player implements Runnable {
         try {
             objectOutputStream.reset();
             objectOutputStream.writeObject(data);
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

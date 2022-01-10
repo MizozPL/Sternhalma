@@ -17,10 +17,10 @@ public class Server {
         this.port = port;
     }
 
-    public void start(){
-        try(ServerSocket serverSocket = new ServerSocket(port, BACKLOG, InetAddress.getByName(address))){
+    public void start() {
+        try (ServerSocket serverSocket = new ServerSocket(port, BACKLOG, InetAddress.getByName(address))) {
             ExecutorService executors = Executors.newFixedThreadPool(THREADS);
-            while(true) {
+            while (true) {
                 executors.execute(new Player(serverSocket.accept()));
             }
         } catch (IOException e) {

@@ -52,7 +52,7 @@ public class BasicSternhalma implements Game {
 
     @Override
     public void performAction(Player player, String action) {
-        if(gameFinished) {
+        if (gameFinished) {
             player.sendMessage(NetworkMessages.GAME_END);
         }
 

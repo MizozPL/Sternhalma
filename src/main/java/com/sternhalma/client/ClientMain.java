@@ -11,14 +11,14 @@ public class ClientMain {
         String gameID = JOptionPane.showInputDialog(null, "GameID", "1");
 
         int iPort;
-        try{
+        try {
             iPort = Integer.parseInt(port);
-        } catch(NumberFormatException ex){
-            JOptionPane.showMessageDialog(null,"Bad input","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Bad input", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        Client client = new Client(address,iPort,gameID);
+        Client client = new Client(address, iPort, gameID);
         client.connect();
 
     }

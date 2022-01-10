@@ -24,15 +24,15 @@ public class Piece implements Serializable {
         return playerNumber;
     }
 
-    public static Color getColorForPlayerWithID(int playerID){
+    public static Color getColorForPlayerWithID(int playerID) {
         Color color = Color.WHITE;
-        switch(playerID) {
-            case 1 -> {color = Color.RED;}
-            case 2 -> {color = Color.GREEN;}
-            case 3 -> {color = Color.ORANGE;}
-            case 4 -> {color = Color.YELLOW;}
-            case 5 -> {color = Color.PINK;}
-            case 6 -> {color = Color.CYAN;}
+        switch (playerID) {
+            case 1 -> color = Color.RED;
+            case 2 -> color = Color.GREEN;
+            case 3 -> color = Color.ORANGE;
+            case 4 -> color = Color.YELLOW;
+            case 5 -> color = Color.PINK;
+            case 6 -> color = Color.CYAN;
         }
         return color;
     }

@@ -8,11 +8,11 @@ public class ServerMain {
     public static String ADDRESS = "localhost";
 
     public static void main(String[] args) {
-        if(args.length == 2) {
+        if (args.length == 2) {
             try {
                 PORT = Integer.parseInt(args[1]);
                 ADDRESS = args[0];
-            } catch(NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 ex.printStackTrace();
             }
         }

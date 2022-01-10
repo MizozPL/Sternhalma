@@ -5,7 +5,7 @@ import com.sternhalma.common.games.Games;
 
 public class GameFactory {
     public static Game creteGameInstance(String gameName) {
-        switch(gameName) {
+        switch (gameName) {
             case Games.BASIC_STERNHALMA -> {
                 return new BasicSternhalma();
             }
