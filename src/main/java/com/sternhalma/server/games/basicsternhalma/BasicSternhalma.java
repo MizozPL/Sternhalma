@@ -71,6 +71,10 @@ public class BasicSternhalma implements Game {
                 }
                 case "ENDTURN" -> {
                     turn++;
+                    int playerID = players.get(player);
+                    if (!board.getWinners().contains(playerID) && board.checkForWin(playerID)) {
+                        board.addWinner(playerID);
+                    }
                 }
             }
         }
