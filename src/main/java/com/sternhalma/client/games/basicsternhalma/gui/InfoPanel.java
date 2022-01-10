@@ -28,9 +28,13 @@ public class InfoPanel extends JPanel {
         playerTag.setPreferredSize(endTurnButton.getPreferredSize());
         playerTag.setBorder(new BevelBorder(BevelBorder.LOWERED));
 
+        JPanel spacing = new JPanel();
+        spacing.setPreferredSize(new Dimension(0, 15));
+
         add(playerTag, BorderLayout.WEST);
         add(turnPanel, BorderLayout.CENTER);
         add(endTurnButton, BorderLayout.EAST);
+        add(spacing, BorderLayout.SOUTH);
     }
 
     public void setPlayerID(int playerID) {
