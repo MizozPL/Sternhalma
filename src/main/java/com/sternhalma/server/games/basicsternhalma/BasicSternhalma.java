@@ -8,6 +8,10 @@ import com.sternhalma.server.games.Game;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import static java.lang.Math.abs;
 
 public class BasicSternhalma implements Game {
 
@@ -17,6 +21,7 @@ public class BasicSternhalma implements Game {
     private boolean gameFinished;
     private Point lastPieceMovedLocation;
     private boolean isLastMoveJump;
+    private final Set<Integer> winners;
 
     public BasicSternhalma() {
         players = new HashMap<>();
@@ -25,6 +30,7 @@ public class BasicSternhalma implements Game {
         gameFinished = false;
         isLastMoveJump = false;
         lastPieceMovedLocation = null;
+        winners = new HashSet<>();
     }
 
     @Override
@@ -76,75 +82,113 @@ public class BasicSternhalma implements Game {
 
         switch (command) {
             case NetworkMessages.MOVE -> {
-                String fromStr = tokens[1];
-                String toStr = tokens[2];
-
-                int oldX = Integer.parseInt(fromStr.split(",")[0]);
-                int oldY = Integer.parseInt(fromStr.split(",")[1]);
-                int newX = Integer.parseInt(toStr.split(",")[0]);
-                int newY = Integer.parseInt(toStr.split(",")[1]);
-
-                Point oldPoint = new Point(oldX, oldY);
-                Point newPoint = new Point(newX, newY);
-
-                if (players.get(player) != board.getPlayerIDAt(oldPoint)) {
-                    player.sendMessage(NetworkMessages.BAD_PIECE);
-                    return;
-                }
-
-                if (lastPieceMovedLocation != null) {
-                    if (!lastPieceMovedLocation.equals(oldPoint)) {
-                        return;
-                    }
-
-                    if (!isLastMoveJump) {
-                        return;
-                    }
-
-                    if (board.isValidJump(oldPoint, newPoint)) {
-                        if (!board.isLeavingOpponentBase(oldPoint, newPoint)) {
-                            board.movePiece(oldPoint, newPoint);
-                            lastPieceMovedLocation = newPoint;
-                            isLastMoveJump = true;
-                            broadcastBoardUpdate();
-
-                        }
-                    }
-
-                } else {
-                    if (board.isValidMove(oldPoint, newPoint) || board.isValidJump(oldPoint, newPoint)) {
-                        if (!board.isLeavingOpponentBase(oldPoint, newPoint)) {
-                            isLastMoveJump = board.isValidJump(oldPoint, newPoint);
-                            lastPieceMovedLocation = newPoint;
-                            board.movePiece(oldPoint, newPoint);
-                            broadcastBoardUpdate();
-                        }
-                    }
-                }
-
+                actionMove(player, tokens);
             }
 
             case NetworkMessages.END_TURN -> {
-                int playerID = players.get(player);
-                if (!board.getWinners().contains(playerID) && board.checkForWin(playerID)) {
-                    board.addWinner(playerID);
-                    broadcastWinner(playerID);
-                }
-                if (board.getWinners().size() == board.getNumberOfPlayers()) {
-                    gameFinished = true;
-                    broadcastGameEnd();
-                    return;
-                }
-                lastPieceMovedLocation = null;
-                isLastMoveJump = false;
-                do {
-                    turn++;
-                }
-                while (board.getWinners().contains(getPlayerIDFromTurn(turn)));
-                broadcastBoardUpdate();
+                actionEndTurn(player);
             }
         }
 
+    }
+
+    private void actionEndTurn(Player player) {
+        int playerID = players.get(player);
+        if (!getWinners().contains(playerID) && board.checkForWin(playerID)) {
+            addWinner(playerID);
+            broadcastWinner(playerID);
+        }
+        if (getWinners().size() == board.getNumberOfPlayers()) {
+            gameFinished = true;
+            broadcastGameEnd();
+            return;
+        }
+        lastPieceMovedLocation = null;
+        isLastMoveJump = false;
+        do {
+            turn++;
+        }
+        while (getWinners().contains(getPlayerIDFromTurn(turn)));
+        broadcastBoardUpdate();
+    }
+
+    private void actionMove(Player player, String[] tokens) {
+        String fromStr = tokens[1];
+        String toStr = tokens[2];
+
+        int oldX = Integer.parseInt(fromStr.split(",")[0]);
+        int oldY = Integer.parseInt(fromStr.split(",")[1]);
+        int newX = Integer.parseInt(toStr.split(",")[0]);
+        int newY = Integer.parseInt(toStr.split(",")[1]);
+
+        Point oldPoint = new Point(oldX, oldY);
+        Point newPoint = new Point(newX, newY);
+
+        if (players.get(player) != board.getPlayerIDAt(oldPoint)) {
+            player.sendMessage(NetworkMessages.BAD_PIECE);
+            return;
+        }
+
+        if (lastPieceMovedLocation != null) {
+            if (!lastPieceMovedLocation.equals(oldPoint)) {
+                return;
+            }
+
+            if (!isLastMoveJump) {
+                return;
+            }
+
+            if (isValidJump(oldPoint, newPoint)) {
+                if (!board.isLeavingOpponentBase(oldPoint, newPoint)) {
+                    board.movePiece(oldPoint, newPoint);
+                    lastPieceMovedLocation = newPoint;
+                    isLastMoveJump = true;
+                    broadcastBoardUpdate();
+
+                }
+            }
+
+        } else {
+            if (isValidMove(oldPoint, newPoint) || isValidJump(oldPoint, newPoint)) {
+                if (!board.isLeavingOpponentBase(oldPoint, newPoint)) {
+                    isLastMoveJump = isValidJump(oldPoint, newPoint);
+                    lastPieceMovedLocation = newPoint;
+                    board.movePiece(oldPoint, newPoint);
+                    broadcastBoardUpdate();
+                }
+            }
+        }
+    }
+
+    private boolean canJump(Point oldP, Point newP, int offsetX, int offsetY) {
+        int newX = newP.x;
+        int newY = newP.y;
+        int oldX = oldP.x;
+        int oldY = oldP.y;
+        return ((newX - oldX) == 2 * offsetX && (newY - oldY) == 2 * offsetY)
+                && board.getAllPiecesPositions().contains(new Point(oldX + offsetX, oldY + offsetY));
+    }
+
+    public boolean isValidMove(Point oldPoint, Point newPoint) {
+        return (abs(oldPoint.x - newPoint.x) == 1 && abs(oldPoint.y - newPoint.y) == 1)
+                || (abs(oldPoint.x - newPoint.x) == 2 && abs(oldPoint.y - newPoint.y) == 0);
+    }
+
+    public boolean isValidJump(Point oldPoint, Point newPoint) {
+        return this.canJump(oldPoint, newPoint, 2, 0)
+                || this.canJump(oldPoint, newPoint, -2, 0)
+                || this.canJump(oldPoint, newPoint, 1, 1)
+                || this.canJump(oldPoint, newPoint, 1, -1)
+                || this.canJump(oldPoint, newPoint, -1, 1)
+                || this.canJump(oldPoint, newPoint, -1, -1);
+    }
+
+    public Set<Integer> getWinners() {
+        return winners;
+    }
+
+    public void addWinner(int playerID) {
+        this.winners.add(playerID);
     }
 
     private void broadcastBoardUpdate() {

@@ -24,7 +24,6 @@ public class Board implements Serializable {
     private static final HashSet<Point> bottomLeftBasePoints;
     private static final HashSet<Point> topLeftBasePoints;
 
-    private final Set<Integer> winners;
     private int[] opponents;
 
     private Point lastMoveDestination;
@@ -35,7 +34,6 @@ public class Board implements Serializable {
         opponents = null;
         lastMoveDestination = null;
         piecesWithPosition = new HashMap<>();
-        winners = new HashSet<>();
     }
 
     static {
@@ -53,20 +51,6 @@ public class Board implements Serializable {
         piecesWithPosition.remove(oldPosition);
     }
 
-    private boolean canJump(Point oldP, Point newP, int offsetX, int offsetY) {
-        int newX = newP.x;
-        int newY = newP.y;
-        int oldX = oldP.x;
-        int oldY = oldP.y;
-        return ((newX - oldX) == 2 * offsetX && (newY - oldY) == 2 * offsetY)
-                && getAllPiecesPositions().contains(new Point(oldX + offsetX, oldY + offsetY));
-    }
-
-    public boolean isValidMove(Point oldPoint, Point newPoint) {
-        return (abs(oldPoint.x - newPoint.x) == 1 && abs(oldPoint.y - newPoint.y) == 1)
-                || (abs(oldPoint.x - newPoint.x) == 2 && abs(oldPoint.y - newPoint.y) == 0);
-    }
-
     public boolean isLeavingOpponentBase(Point oldPoint, Point newPoint) {
         int playerID = this.getPlayerIDAt(oldPoint);
         return this.getOpponentBaseCoordinates(playerID).contains(oldPoint) &&
@@ -74,25 +58,8 @@ public class Board implements Serializable {
 
     }
 
-    public boolean isValidJump(Point oldPoint, Point newPoint) {
-        return this.canJump(oldPoint, newPoint, 2, 0)
-                || this.canJump(oldPoint, newPoint, -2, 0)
-                || this.canJump(oldPoint, newPoint, 1, 1)
-                || this.canJump(oldPoint, newPoint, 1, -1)
-                || this.canJump(oldPoint, newPoint, -1, 1)
-                || this.canJump(oldPoint, newPoint, -1, -1);
-    }
-
     public boolean isValidPoint(Point point) {
         return validPoints.contains(point);
-    }
-
-    public Set<Integer> getWinners() {
-        return winners;
-    }
-
-    public void addWinner(int playerID) {
-        this.winners.add(playerID);
     }
 
     public int getNumberOfPlayers() {
