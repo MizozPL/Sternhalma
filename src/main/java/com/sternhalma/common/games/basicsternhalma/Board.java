@@ -322,7 +322,7 @@ public class Board implements Serializable {
                 setPiecesAtPositionOne(1);
                 setPiecesAtPositionThree(2);
                 setPiecesAtPositionFive(3);
-
+                setOpponents();
             }
             case 4 -> {
                 clearBoard();
