@@ -7,8 +7,6 @@ import com.sternhalma.server.games.Game;
 import java.awt.*;
 import java.util.HashMap;
 
-import static java.lang.Math.abs;
-
 public class BasicSternhalma implements Game {
 
     private final HashMap<Player, Integer> players;
@@ -53,20 +51,10 @@ public class BasicSternhalma implements Game {
                 Point oldPoint = new Point(oldX, oldY);
                 Point newPoint = new Point(newX, newY);
                 if (
-                        (abs(oldX - newX) == 1 && abs(oldY - newY) == 1)
-                                || (abs(oldX - newX) == 2 && abs(oldY - newY) == 0)
-                                || board.canJump(oldPoint, newPoint, 2, 0)
-                                || board.canJump(oldPoint, newPoint, -2, 0)
-                                || board.canJump(oldPoint, newPoint, 1, 1)
-                                || board.canJump(oldPoint, newPoint, 1, -1)
-                                || board.canJump(oldPoint, newPoint, -1, 1)
-                                || board.canJump(oldPoint, newPoint, -1, -1)
+                        board.isValidMove(oldPoint, newPoint) || board.isValidJump(oldPoint, newPoint)
                 ) {
-                    int playerID = board.getPlayerIDAt(oldPoint);
                     if (
-                            !(
-                                    board.getOpponentBasePoints(playerID).contains(oldPoint) &&
-                                            !(board.getOpponentBasePoints(playerID).contains(newPoint)))
+                            !board.isLeavingOpponentBase(oldPoint, newPoint)
                     ) {
                         board.movePiece(oldPoint, newPoint);
                         players.keySet().forEach(p -> {

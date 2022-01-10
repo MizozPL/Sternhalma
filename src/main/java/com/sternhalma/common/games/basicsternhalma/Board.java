@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import static java.lang.Math.abs;
+
 public class Board implements Serializable {
 
     public static final int BOARD_X = 25;
@@ -45,13 +47,34 @@ public class Board implements Serializable {
         piecesWithPosition.remove(oldPosition);
     }
 
-    public boolean canJump(Point oldP, Point newP, int offsetX, int offsetY) {
+    private boolean canJump(Point oldP, Point newP, int offsetX, int offsetY) {
         int newX = newP.x;
         int newY = newP.y;
         int oldX = oldP.x;
         int oldY = oldP.y;
         return ((newX - oldX) == 2 * offsetX && (newY - oldY) == 2 * offsetY)
                 && getAllPiecesPositions().contains(new Point(oldX + offsetX, oldY + offsetY));
+    }
+
+    public boolean isValidMove(Point oldPoint, Point newPoint) {
+        return (abs(oldPoint.x - newPoint.x) == 1 && abs(oldPoint.y - newPoint.y) == 1)
+                || (abs(oldPoint.x - newPoint.x) == 2 && abs(oldPoint.y - newPoint.y) == 0);
+    }
+
+    public boolean isLeavingOpponentBase(Point oldPoint, Point newPoint) {
+        int playerID = this.getPlayerIDAt(oldPoint);
+        return this.getOpponentBasePoints(playerID).contains(oldPoint) &&
+                !(this.getOpponentBasePoints(playerID).contains(newPoint));
+
+    }
+
+    public boolean isValidJump(Point oldPoint, Point newPoint) {
+        return this.canJump(oldPoint, newPoint, 2, 0)
+                || this.canJump(oldPoint, newPoint, -2, 0)
+                || this.canJump(oldPoint, newPoint, 1, 1)
+                || this.canJump(oldPoint, newPoint, 1, -1)
+                || this.canJump(oldPoint, newPoint, -1, 1)
+                || this.canJump(oldPoint, newPoint, -1, -1);
     }
 
     public boolean isValidPoint(Point point) {
