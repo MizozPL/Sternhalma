@@ -9,7 +9,7 @@ public class GameFactory {
 
     }
 
-    public static Game createGame(String gameName) {
+    public static Game createGameInstance(String gameName) {
         switch (gameName) {
             case Games.BASIC_STERNHALMA -> {
                 return new BasicSternhalma();

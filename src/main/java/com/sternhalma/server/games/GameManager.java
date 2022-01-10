@@ -23,7 +23,7 @@ public class GameManager {
             player.sendMessage(NetworkMessages.GAME_WITH_ID_EXISTS);
             return;
         }
-        Game game = GameFactory.createGame(gameType);
+        Game game = GameFactory.createGameInstance(gameType);
         if (game == null) {
             player.sendMessage(NetworkMessages.BAD_GAME_TYPE);
             return;
