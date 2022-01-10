@@ -21,7 +21,7 @@ public class BasicSternhalma implements Game {
 
     @Override
     public boolean joinPlayer(Player player) {
-        if (!players.containsKey(player)) {
+        if (!players.containsKey(player) && players.size() < 6) {
             player.sendMessage(getGameName());
             int id = board.addPlayer();
             players.put(player, id);
