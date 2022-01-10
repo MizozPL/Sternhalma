@@ -58,7 +58,7 @@ public class Client {
             JOptionPane.showMessageDialog(clientFrame, "Error joining game!\nRestart client...", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        Game instance = GameFactory.creteGameInstance(GAME_NAME);
+        Game instance = GameFactory.createGameInstance(GAME_NAME);
         if (instance == null) {
             JOptionPane.showMessageDialog(clientFrame, "Error creating local game instance!\nRestart client...", "Error", JOptionPane.ERROR_MESSAGE);
             return;
