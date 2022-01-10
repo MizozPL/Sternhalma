@@ -8,7 +8,7 @@ import java.awt.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
 
@@ -21,12 +21,88 @@ class BoardTest {
     }
 
     @Test
+    void testConstructor() {
+        assertEquals(0, underTest.getNumberOfPlayers());
+    }
+
+    @Test
     void testMovePiece() {
+        underTest.addPlayer();
+        Piece before = underTest.getPieceAt(new Point(9, 3));
+        underTest.movePiece(new Point(9, 3), new Point(8, 4));
+        Piece after = underTest.getPieceAt(new Point(8, 4));
+        assertThat(before).isEqualTo(after);
 
     }
 
+    @Test
+    void testGetPlayerIDAt() {
+        underTest.addPlayer();
+        assertThat(underTest.getPlayerIDAt(new Point(12, 0))).isEqualTo(1);
+    }
 
+    @Test
+    void testGetOpponentBaseNumber() {
+        underTest.addPlayer();
+        underTest.addPlayer();
+        assertThat(underTest.getOpponentBaseNumber(1)).isEqualTo(4);
+    }
 
+    @Test
+    void testGetOpponentBaseCoordinates() {
+        Board board = new Board();
+        board.addPlayer();
+        board.addPlayer();
+        assertEquals(10, board.getOpponentBaseCoordinates(1).size());
+    }
+
+    @Test
+    void testGetOpponentBaseCoordinates2() {
+        Board board = new Board();
+        board.addPlayer();
+        board.addPlayer();
+        board.addPlayer();
+        assertEquals(10, board.getOpponentBaseCoordinates(1).size());
+    }
+
+    @Test
+    void testGetOpponentBaseCoordinates3() {
+        Board board = new Board();
+        board.addPlayer();
+        board.addPlayer();
+        assertEquals(10, board.getOpponentBaseCoordinates(2).size());
+    }
+
+    @Test
+    void testGetOpponentBaseCoordinates4() {
+        Board board = new Board();
+        board.addPlayer();
+        board.addPlayer();
+        board.addPlayer();
+        assertEquals(10, board.getOpponentBaseCoordinates(2).size());
+    }
+
+    @Test
+    void testGetOpponentBaseCoordinates5() {
+        Board board = new Board();
+        board.addPlayer();
+        board.addPlayer();
+        board.addPlayer();
+        board.addPlayer();
+        assertEquals(10, board.getOpponentBaseCoordinates(4).size());
+    }
+
+    @Test
+    void testGetOpponentBaseCoordinates6() {
+        Board board = new Board();
+        board.addPlayer();
+        board.addPlayer();
+        board.addPlayer();
+        board.addPlayer();
+        board.addPlayer();
+        board.addPlayer();
+        assertEquals(10, board.getOpponentBaseCoordinates(5).size());
+    }
 
     @Test
     void isLeavingOpponentBase() {
@@ -57,44 +133,16 @@ class BoardTest {
     }
 
     @Test
-    void getWinners() {
+    void testGetPieceAt() {
+        assertNull(underTest.getPieceAt(new Point(2, 3)));
     }
 
     @Test
-    void addWinner() {
+    void testGetPieceAt2() {
+        underTest.addPlayer();
+        assertNotNull(underTest.getPieceAt(new Point(12, 0)));
     }
 
-    @Test
-    void getNumberOfPlayers() {
-    }
-
-    @Test
-    void getPieceAt() {
-    }
-
-    @Test
-    void getPlayerIDAt() {
-    }
-
-    @Test
-    void getValidPositions() {
-    }
-
-    @Test
-    void getAllPiecesPositions() {
-    }
-
-    @Test
-    void getPlayerPiecesCoordinates() {
-    }
-
-    @Test
-    void getOpponentBaseNumber() {
-    }
-
-    @Test
-    void getOpponentBaseCoordinates() {
-    }
 
     @Test
     void testAddPlayer() {
@@ -167,6 +215,10 @@ class BoardTest {
     }
 
     @Test
-    void checkForWin() {
+    void testCheckForWin() {
+        Board board = new Board();
+        board.addPlayer();
+        board.addPlayer();
+        assertFalse(board.checkForWin(1));
     }
 }
