@@ -22,10 +22,11 @@ public class BasicSternhalma implements Game {
     @Override
     public boolean joinPlayer(Player player) {
         if (!players.containsKey(player)) {
+            player.sendMessage(getGameName());
             int id = board.addPlayer();
             players.put(player, id);
             players.keySet().forEach(p -> {
-                p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn);
+                p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn + ":" + board.getNumberOfPlayers());
                 p.sendObject(board);
             });
             return true;
@@ -44,7 +45,8 @@ public class BasicSternhalma implements Game {
         //MOVE:4,0:4,2
         String[] tokens = action.split(":", 3);
         String command = tokens[0];
-        if (isPlayersTurn(player)) {
+        int numberOfPlayers = board.getNumberOfPlayers();
+        if (isPlayersTurn(player) && (numberOfPlayers != 1 && numberOfPlayers != 5)) {
             switch (command) {
                 case "MOVE" -> {
                     String fromStr = tokens[1];
@@ -63,7 +65,7 @@ public class BasicSternhalma implements Game {
                         ) {
                             board.movePiece(oldPoint, newPoint);
                             players.keySet().forEach(p -> {
-                                p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn);
+                                p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn + ":" + board.getNumberOfPlayers());
                                 p.sendObject(board);
                             });
                         }
@@ -71,6 +73,14 @@ public class BasicSternhalma implements Game {
                 }
                 case "ENDTURN" -> {
                     turn++;
+                    players.keySet().forEach(p -> {
+                        p.sendMessage("BOARD_UPDATE:" + players.get(p) + ":" + turn + ":" + board.getNumberOfPlayers());
+                        p.sendObject(board);
+                    });
+                    int playerID = players.get(player);
+                    if (!board.getWinners().contains(playerID) && board.checkForWin(playerID)) {
+                        board.addWinner(playerID);
+                    }
                 }
             }
         }
