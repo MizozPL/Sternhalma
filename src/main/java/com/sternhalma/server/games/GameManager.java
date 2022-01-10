@@ -8,12 +8,10 @@ import java.util.HashMap;
 public class GameManager {
 
     private static final GameManager instance = new GameManager();
-    private final GameFactory factory;
     private final HashMap<String, Game> games;
 
     private GameManager() {
         games = new HashMap<String, Game>();
-        factory = new GameFactory();
     }
 
     public static GameManager getInstance() {
@@ -25,7 +23,7 @@ public class GameManager {
             player.sendMessage(NetworkMessages.GAME_WITH_ID_EXISTS);
             return;
         }
-        Game game = factory.createGame(gameType);
+        Game game = GameFactory.createGame(gameType);
         if (game == null) {
             player.sendMessage(NetworkMessages.BAD_GAME_TYPE);
             return;

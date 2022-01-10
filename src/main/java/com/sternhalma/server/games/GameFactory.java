@@ -5,7 +5,11 @@ import com.sternhalma.server.games.basicsternhalma.BasicSternhalma;
 
 public class GameFactory {
 
-    public Game createGame(String gameName) {
+    private GameFactory() {
+
+    }
+
+    public static Game createGame(String gameName) {
         switch (gameName) {
             case Games.BASIC_STERNHALMA -> {
                 return new BasicSternhalma();
