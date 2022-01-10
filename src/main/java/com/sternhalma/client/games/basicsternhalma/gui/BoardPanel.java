@@ -2,6 +2,7 @@ package com.sternhalma.client.games.basicsternhalma.gui;
 
 import com.sternhalma.client.games.basicsternhalma.BasicSternhalma;
 import com.sternhalma.common.games.basicsternhalma.Board;
+import com.sternhalma.common.games.basicsternhalma.Piece;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,12 +35,12 @@ public class BoardPanel extends JPanel implements MouseListener {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         drawAllValidSpots(g2d, Color.GRAY);
-        drawPlayerPieces(g2d, 1, Color.RED);
-        drawPlayerPieces(g2d, 2, Color.GREEN);
-        drawPlayerPieces(g2d, 3, Color.ORANGE);
-        drawPlayerPieces(g2d, 4, Color.YELLOW);
-        drawPlayerPieces(g2d, 5, Color.PINK);
-        drawPlayerPieces(g2d, 6, Color.CYAN);
+        drawPlayerPieces(g2d, 1, Piece.getColorForPlayerWithID(1));
+        drawPlayerPieces(g2d, 2, Piece.getColorForPlayerWithID(2));
+        drawPlayerPieces(g2d, 3, Piece.getColorForPlayerWithID(3));
+        drawPlayerPieces(g2d, 4, Piece.getColorForPlayerWithID(4));
+        drawPlayerPieces(g2d, 5, Piece.getColorForPlayerWithID(5));
+        drawPlayerPieces(g2d, 6, Piece.getColorForPlayerWithID(6));
         if(selectedPosition != null) {
             g2d.setColor(Color.BLACK);
             g2d.setStroke(new BasicStroke(3));

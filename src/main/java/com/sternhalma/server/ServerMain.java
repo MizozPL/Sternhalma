@@ -4,12 +4,19 @@ import com.sternhalma.server.connection.Server;
 
 public class ServerMain {
 
-    public static final int DEFAULT_PORT = 25000;
-    public static final String DEFAULT_ADDRESS = "localhost";
+    public static int PORT = 25000;
+    public static String ADDRESS = "localhost";
 
     public static void main(String[] args) {
-        //TODO: Dodać parsowanie argumentów konsoli i odpowiednio zastąpić wartości domyślne.
-        Server server = new Server(DEFAULT_ADDRESS, DEFAULT_PORT);
+        if(args.length == 2) {
+            try {
+                PORT = Integer.parseInt(args[1]);
+                ADDRESS = args[0];
+            } catch(NumberFormatException ex) {
+                ex.printStackTrace();
+            }
+        }
+        Server server = new Server(ADDRESS, PORT);
         server.start();
     }
 }

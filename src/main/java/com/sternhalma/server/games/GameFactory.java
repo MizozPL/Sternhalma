@@ -1,12 +1,13 @@
 package com.sternhalma.server.games;
 
+import com.sternhalma.common.games.Games;
 import com.sternhalma.server.games.basicsternhalma.BasicSternhalma;
 
 public class GameFactory {
 
     public Game createGame(String gameName){
         switch(gameName) {
-            case "BasicSternhalma" -> {
+            case Games.BASIC_STERNHALMA -> {
                 return new BasicSternhalma();
             }
             default -> {

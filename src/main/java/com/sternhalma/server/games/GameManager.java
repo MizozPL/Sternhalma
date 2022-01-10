@@ -1,5 +1,6 @@
 package com.sternhalma.server.games;
 
+import com.sternhalma.common.connection.NetworkMessages;
 import com.sternhalma.server.connection.Player;
 
 import java.util.HashMap;
@@ -21,16 +22,16 @@ public class GameManager {
 
     public synchronized void createGame(Player player, String gameID, String gameType) {
         if (games.containsKey(gameID)) {
-            player.sendMessage("Game with id: " + gameID + "already exists!");
+            player.sendMessage(NetworkMessages.GAME_WITH_ID_EXISTS);
             return;
         }
         Game game = factory.createGame(gameType);
         if (game == null) {
-            player.sendMessage("No such game!");
+            player.sendMessage(NetworkMessages.BAD_GAME_TYPE);
             return;
         }
         games.put(gameID, game);
-        player.sendMessage("Game created!");
+        player.sendMessage(NetworkMessages.GAME_CREATED);
     }
 
     public synchronized void performAction(Player player, String gameID, String action) {
@@ -38,14 +39,13 @@ public class GameManager {
             games.get(gameID).performAction(player, action);
             return;
         }
-        player.sendMessage("INVALID");
+        player.sendMessage(NetworkMessages.GAME_WITH_ID_DOES_NOT_EXIST);
     }
 
     public synchronized void joinGame(Player player, String gameID) {
         if (games.containsKey(gameID)) {
-            if(!games.get(gameID).joinPlayer(player)) {
-                player.sendMessage("Not joined");
-            }
+            games.get(gameID).joinPlayer(player);
         }
+        player.sendMessage(NetworkMessages.GAME_WITH_ID_DOES_NOT_EXIST);
     }
 }

@@ -3,6 +3,7 @@ package com.sternhalma.client.games.basicsternhalma;
 import com.sternhalma.client.connection.Client;
 import com.sternhalma.client.games.Game;
 import com.sternhalma.client.games.basicsternhalma.gui.BasicSternhalmaPanel;
+import com.sternhalma.common.connection.NetworkMessages;
 import com.sternhalma.common.games.basicsternhalma.Board;
 
 import javax.swing.*;
@@ -18,19 +19,22 @@ public class BasicSternhalma implements Game {
         panel = new BasicSternhalmaPanel(this);
         this.client.getClientFrame().setGamePanel(panel);
         Object object;
-        while(true){
+        while (true) {
             object = client.readObject();
-            if(object instanceof Board) {
+
+            if (object instanceof Board) {
                 Board board = (Board) object;
                 panel.setBoard(board);
                 continue;
             }
-            if(object instanceof String) {
+
+            if (object instanceof String) {
                 String message = (String) object;
                 String tokens[] = message.split(":");
-                switch(tokens[0]) {
-                    case "BOARD_UPDATE" -> {
-                        if(tokens.length > 3){
+
+                switch (tokens[0]) {
+                    case NetworkMessages.BOARD_UPDATE -> {
+                        if (tokens.length > 3) {
                             try {
                                 int playerID = Integer.parseInt(tokens[1]);
                                 int turn = Integer.parseInt(tokens[2]);
@@ -38,7 +42,7 @@ public class BasicSternhalma implements Game {
 
                                 int controlNumber = turn % playerNum;
                                 int realTurn = (controlNumber == 0 ? playerNum : controlNumber);
-
+                                System.out.println(playerID + " " + turn);
                                 panel.setPlayerID(playerID);
                                 panel.setTurn(realTurn);
                                 panel.repaint();
@@ -47,18 +51,18 @@ public class BasicSternhalma implements Game {
                             }
                         }
                     }
-                    case "WINNER" -> {
-                        if(tokens.length > 1){
+                    case NetworkMessages.WINNER -> {
+                        if (tokens.length > 1) {
                             try {
                                 int playerID = Integer.parseInt(tokens[1]);
-                                JOptionPane.showMessageDialog(client.getClientFrame(),"Player " + playerID + "ended the game!", "Information", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(client.getClientFrame(), "Player " + playerID + " ended the game!", "Information", JOptionPane.INFORMATION_MESSAGE);
                             } catch (NumberFormatException ex) {
                                 ex.printStackTrace();
                             }
                         }
                     }
-                    case "GAME_ENDED" -> {
-                        JOptionPane.showMessageDialog(client.getClientFrame(),"Game ended!", "Information", JOptionPane.INFORMATION_MESSAGE);
+                    case NetworkMessages.GAME_END -> {
+                        JOptionPane.showMessageDialog(client.getClientFrame(), "Game ended!", "Information", JOptionPane.INFORMATION_MESSAGE);
                         return; //disconnect
                     }
                 }
@@ -66,13 +70,11 @@ public class BasicSternhalma implements Game {
         }
     }
 
-    public void movePiece(Point from, Point to){
-        if(client.isConnected())
-            client.sendMessage("performAction:"+ client.getGameID() +":MOVE:"+from.x+","+from.y+":"+to.x+","+to.y);
+    public void movePiece(Point from, Point to) {
+        client.sendMessage(NetworkMessages.PERFORM_ACTION + ":" + client.getGameID() + ":" + NetworkMessages.MOVE + ":" + from.x + "," + from.y + ":" + to.x + "," + to.y);
     }
 
-    public void endTurn(){
-        if(client.isConnected())
-            client.sendMessage("performAction:"+ client.getGameID() +":ENDTURN");
+    public void endTurn() {
+        client.sendMessage(NetworkMessages.PERFORM_ACTION + ":" + client.getGameID() + ":" + NetworkMessages.END_TURN);
     }
 }

@@ -1,5 +1,6 @@
 package com.sternhalma.server.connection;
 
+import com.sternhalma.common.connection.NetworkMessages;
 import com.sternhalma.server.games.GameManager;
 
 import java.io.IOException;
@@ -9,10 +10,8 @@ import java.util.Scanner;
 
 public class Player implements Runnable {
     private final Socket playerSocket;
-    //private PrintWriter output;
     private Scanner input;
     private ObjectOutputStream objectOutputStream;
-    private volatile boolean connected = false;
 
     public Player(Socket socket) {
         this.playerSocket = socket;
@@ -22,41 +21,37 @@ public class Player implements Runnable {
     @Override
     public void run() {
         try {
-            //output = new PrintWriter(playerSocket.getOutputStream(), true);
             input = new Scanner(playerSocket.getInputStream());
             objectOutputStream = new ObjectOutputStream(playerSocket.getOutputStream());
-            connected = true;
+
             while (input.hasNextLine()) {
-                if(!connected)
-                    break;
                 String line = input.nextLine();
                 String[] tokens = line.split(":", 3);
                 String request = tokens[0];
 
                 switch (request) {
-                    case "createGame" -> {
+                    case NetworkMessages.CREATE_GAME -> {
                         String gameID = tokens[1];
                         String gameType = tokens[2];
                         GameManager.getInstance().createGame(this, gameID, gameType);
                     }
-                    case "joinGame" -> {
+                    case NetworkMessages.JOIN_GAME -> {
                         String gameID = tokens[1];
                         GameManager.getInstance().joinGame(this, gameID);
                     }
-                    case "performAction" -> {
+                    case NetworkMessages.PERFORM_ACTION -> {
                         String gameID = tokens[1];
                         String action = tokens[2];
                         GameManager.getInstance().performAction(this, gameID, action);
                     }
                     default -> {
-                        sendMessage("Bad request!");
+                        sendMessage(NetworkMessages.BAD_REQUEST);
                     }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            connected = false;
             try {
                 playerSocket.close();
             } catch (IOException e) {
@@ -76,15 +71,10 @@ public class Player implements Runnable {
             objectOutputStream.reset();
             objectOutputStream.writeObject(data);
         } catch (IOException e){
-            //TODO
+            e.printStackTrace();
         }
     }
 
-    public void disconnect(){
-        connected = false;
-    }
-
-    //Nie musi być synchronized bo korzysta z sendObject
     public void sendMessage(String data) {
         sendObject(data);
     }
