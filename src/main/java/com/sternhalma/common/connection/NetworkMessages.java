@@ -1,5 +1,8 @@
 package com.sternhalma.common.connection;
 
+/**
+ * Klasa służąca za rejestr wiadomości (komunikatów i żądań) dla klienta i serwera.
+ */
 public class NetworkMessages {
     public static final String JOIN_GAME = "JOIN_GAME";
     public static final String GAME_FULL = "GAME_FULL";
@@ -24,6 +27,9 @@ public class NetworkMessages {
     public static final String GAME_END = "GAME_END";
     public static final String GAME_END_PLAYER_DISCONNECTED = "GAME_END_PLAYER_DISCONNECTED";
 
+    /**
+     * Prywatny konstruktor.
+     */
     private NetworkMessages() {
     }
 }
