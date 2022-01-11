@@ -9,10 +9,24 @@ import com.sternhalma.common.games.basicsternhalma.Board;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Implementacja podstawowego wariantu gry po stronie serwera.
+ * Deleguje wysyłanie i pobieranie informacji z serwera do klasy Client oraz odpowiednio je przetwarza/parsuje.
+ */
 public class BasicSternhalma implements Game {
+    /**
+     * Panel interfejsu gry.
+     */
     private BasicSternhalmaPanel panel;
+    /**
+     * Handler połączenia z serwerem.
+     */
     private Client client;
 
+    /**
+     * Inicjalizuje interfejs gry oraz odpowiednio przetwarza komunikaty z i do serwera. Wyświetla również komunikaty błędów (np. rozłączenie się gracza).
+     * @param client handler do komunikacji z serwerem.
+     */
     @Override
     public void init(Client client) {
         this.client = client;
@@ -78,10 +92,18 @@ public class BasicSternhalma implements Game {
         }
     }
 
+    /**
+     * Deleguje wysłanie żądania wykonania ruchu przez pionek.
+     * @param from pozycja początkowa pionka
+     * @param to pozycja końcowa pionka
+     */
     public void movePiece(Point from, Point to) {
         client.sendMessage(NetworkMessages.PERFORM_ACTION + ":" + client.getGameID() + ":" + NetworkMessages.MOVE + ":" + from.x + "," + from.y + ":" + to.x + "," + to.y);
     }
 
+    /**
+     * Deleguje wysłanie żądania końca tury do serwera.
+     */
     public void endTurn() {
         client.sendMessage(NetworkMessages.PERFORM_ACTION + ":" + client.getGameID() + ":" + NetworkMessages.END_TURN);
     }
