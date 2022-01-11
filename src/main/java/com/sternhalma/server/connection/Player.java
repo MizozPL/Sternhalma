@@ -8,16 +8,36 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * Handler klienta (gracza) podłączonego do serwera.
+ */
 public class Player implements Runnable {
+    /**
+     * Socket gracza.
+     */
     private final Socket playerSocket;
+    /**
+     * Scanner danych wejściowych od gracza.
+     */
     private Scanner input;
+    /**
+     * Strumień wyjściowy obiektów do gracza.
+     */
     private ObjectOutputStream objectOutputStream;
 
+    /**
+     * Konstruktor ustawiający socket gracza.
+     * @param socket socket gracza
+     */
     public Player(Socket socket) {
         this.playerSocket = socket;
     }
 
 
+    /**
+     * Metoda inicjująca odpowiednie strumienie do komunikacji z klientem, oraz wstępnie parsująca żądania klienta.
+     * Metoda ta dba również o poprawne zamknięcia strumienii.
+     */
     @Override
     public void run() {
         try {
@@ -63,10 +83,18 @@ public class Player implements Runnable {
 
     }
 
+    /**
+     * Sprawdza czy klient jest dalej podłączony.
+     * @return true jeśli klient jest podłączony
+     */
     public synchronized boolean isAlive() {
         return objectOutputStream != null;
     }
 
+    /**
+     * Wysyła obiekt do klienta. Jeśli klient nie jest podłączony, nie robi nic.
+     * @param data obiekt dla klienta.
+     */
     public synchronized void sendObject(Object data) {
         if (objectOutputStream == null) {
             //throw new IllegalStateException();
@@ -80,6 +108,10 @@ public class Player implements Runnable {
         }
     }
 
+    /**
+     * Wysyła wiadomość (String) do klienta.
+     * @param data wiadomość dla klienta
+     */
     public void sendMessage(String data) {
         sendObject(data);
     }
