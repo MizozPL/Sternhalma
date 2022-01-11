@@ -228,7 +228,14 @@ public class BasicSternhalma implements Game {
         }
     }
 
-
+    /**
+     * Sprawdza czy ruch z punktu oldP do punktu newP (z możliwym przesunięciem) spełnia reguły.
+     * Różne przesunięcia definują róze kierunki skoków. Np. offsetX = 1 i offsetY = 1 oznacza kierunek skoku prawy dół.
+     * @param oldP stara pozycja
+     * @param newP nowa pozycja
+     * @param offsetX przesunięcie na osi X
+     * @param offsetY przesunięcie na osi Y
+     */
     private boolean canJump(Point oldP, Point newP, int offsetX, int offsetY) {
         int newX = newP.x;
         int newY = newP.y;
