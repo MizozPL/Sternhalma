@@ -13,15 +13,45 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
+/**
+ * Handler gracza łączący się z serwerem.
+ */
 public class Client {
+    /**
+     * Adres serwera.
+     */
     private final String address;
+    /**
+     * Port serwera.
+     */
     private final int port;
+    /**
+     * Id gry.
+     */
     private final String gameID;
+    /**
+     * Główne okno interfejsu użytkownika.
+     */
     private final ClientFrame clientFrame;
+    /**
+     * Wejściowy strumień obiektów z serwera.
+     */
     private ObjectInputStream objectInputStream;
+    /**
+     * PrintWriter do wysyłania danych do serwera.
+     */
     private PrintWriter printWriter;
+    /**
+     * Nazwa typu gry, do którego dołączamy (i tworzymy).
+     */
     private static final String GAME_NAME = Games.BASIC_STERNHALMA;
 
+    /**
+     * Konstruktor inicjalizujący wartości pobranew kklasie ClientMain.java.
+     * @param address adres serwera
+     * @param port port serwera
+     * @param gameID id gry
+     */
     public Client(String address, int port, String gameID) {
         this.address = address;
         this.port = port;
@@ -29,10 +59,17 @@ public class Client {
         clientFrame = new ClientFrame(address + ":" + port);
     }
 
+    /**
+     * Zwraca id gry, do której klient jest połączony.
+     * @return id gry
+     */
     public String getGameID() {
         return gameID;
     }
 
+    /**
+     * Łączy się z serwerem i inicjalizuje komunikację. Tworzy instancję gry.
+     */
     public void connect() {
         try (Socket socket = new Socket(InetAddress.getByName(address), port)) {
             objectInputStream = new ObjectInputStream(socket.getInputStream());
@@ -45,6 +82,9 @@ public class Client {
         printWriter = null;
     }
 
+    /**
+     * Tworzy instancję gry i deleguje dalsze wykonywanie do kodu odpowiedniego dla danej gry. W przypadku błędu wyświetla kkomunikat w okienku.
+     */
     private void createGameInstance() {
         sendMessage(NetworkMessages.CREATE_GAME + ":" + gameID + ":" + GAME_NAME);
         Object response = readObject();
@@ -70,10 +110,19 @@ public class Client {
         instance.init(this);
     }
 
+    /**
+     * Zwraca główne okno interfejsu.
+     * @return główne okno interfejsu
+     */
     public ClientFrame getClientFrame() {
         return clientFrame;
     }
 
+    /**
+     * Wysyła wiadomość do serwera. W przypadku braku połączenia wyrzuca wyjątek.
+     * @throws IllegalStateException
+     * @param message wiadomość do serwera
+     */
     public void sendMessage(String message) {
         if (printWriter == null) {
             throw new IllegalStateException();
@@ -83,6 +132,11 @@ public class Client {
         }
     }
 
+    /**
+     * Pobiera obiekt z serwera. W przypadku braku połączenia wyrzuca wyjątek.
+     * @throws IllegalStateException
+     * @return obiekt z serwera
+     */
     public Object readObject() {
         if (objectInputStream == null) {
             throw new IllegalStateException();
