@@ -9,6 +9,8 @@ import org.mockito.Mock;
 
 import java.awt.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -87,5 +89,17 @@ class BasicSternhalmaTest {
         ((Board) boardField.get(underTest)).addPlayer();
         //then
         assertThat(underTest.isValidJump(oldPoint, newPoint)).isFalse();
+    }
+
+    @Test
+    void testGetPlayerIDFromTurn() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, NoSuchFieldException {
+        Field boardField = BasicSternhalma.class.getDeclaredField("board");
+        boardField.setAccessible(true);
+        ((Board) boardField.get(underTest)).addPlayer();
+        ((Board) boardField.get(underTest)).addPlayer();
+        Method getPlayer = BasicSternhalma.class.getDeclaredMethod("getPlayerIDFromTurn", int.class);
+        getPlayer.setAccessible(true);
+        int result = (int) getPlayer.invoke(underTest,3);
+        assertThat(result).isEqualTo(1);
     }
 }
