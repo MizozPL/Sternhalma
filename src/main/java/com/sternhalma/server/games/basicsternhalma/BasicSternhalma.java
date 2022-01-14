@@ -63,16 +63,17 @@ public class BasicSternhalma implements Game {
 
     /**
      * Dołącza gracza do rozgrywki, oraz przesyła odpowiedni komunikat powodzenia/niepowodzenia. Aktualizuje planszę dla wszystkich graczy.
+     *
      * @param player handler gracza
      */
     @Override
     public void joinPlayer(Player player) {
-        if(!checkPlayersConnected()) {
+        if (!checkPlayersConnected()) {
             player.sendMessage(NetworkMessages.GAME_END_PLAYER_DISCONNECTED);
             return;
         }
 
-        if(gameFinished) {
+        if (gameFinished) {
             player.sendMessage(NetworkMessages.GAME_END);
         }
 
@@ -93,6 +94,7 @@ public class BasicSternhalma implements Game {
 
     /**
      * Sprawdza czy gracz o danym handlerze player ma teraz swoją turę.
+     *
      * @param player handler gracza
      * @return true jeśli prawda, false w przeciwnym przypadku
      */
@@ -103,6 +105,7 @@ public class BasicSternhalma implements Game {
 
     /**
      * Zamienia id gracza, którego teraz jest tura.
+     *
      * @param turn numer tury.
      * @return id gracza, którego jest tura.
      */
@@ -113,12 +116,13 @@ public class BasicSternhalma implements Game {
 
     /**
      * Wykonuje akcję na planszy. Odpowiednio ruch/skok lub zakończenie tury.
+     *
      * @param player handler gracza
      * @param action String określający akcję
      */
     @Override
     public void performAction(Player player, String action) {
-        if(!checkPlayersConnected())
+        if (!checkPlayersConnected())
             return;
 
         if (gameFinished) {
@@ -153,6 +157,7 @@ public class BasicSternhalma implements Game {
 
     /**
      * Akcja zakończenia tury przez gracza. Sprawdzane tu jest m.in. czy ustawił wszystkie piony w bazie. Przesyła zaktualizowaną planszę do wszystkich graczy.
+     *
      * @param player handler gracza kończącego turę.
      */
     private void actionEndTurn(Player player) {
@@ -177,6 +182,7 @@ public class BasicSternhalma implements Game {
 
     /**
      * Akcja ruchu/skoku przez gracza. Przesyła zaktualizowaną planszę do wszystkich graczy.
+     *
      * @param player handler gracza wykonującego akcję.
      * @param tokens parametry akcji
      */
@@ -231,8 +237,9 @@ public class BasicSternhalma implements Game {
     /**
      * Sprawdza czy ruch z punktu oldP do punktu newP (z możliwym przesunięciem) spełnia reguły.
      * Różne przesunięcia definują róze kierunki skoków. Np. offsetX = 1 i offsetY = 1 oznacza kierunek skoku prawy dół.
-     * @param oldP stara pozycja
-     * @param newP nowa pozycja
+     *
+     * @param oldP    stara pozycja
+     * @param newP    nowa pozycja
      * @param offsetX przesunięcie na osi X
      * @param offsetY przesunięcie na osi Y
      */
@@ -241,24 +248,28 @@ public class BasicSternhalma implements Game {
         int newY = newP.y;
         int oldX = oldP.x;
         int oldY = oldP.y;
-        return ((newX - oldX) == 2 * offsetX && (newY - oldY) == 2 * offsetY)
-                && board.getAllPiecesPositions().contains(new Point(oldX + offsetX, oldY + offsetY));
+        return (((newX - oldX) == 2 * offsetX && (newY - oldY) == 2 * offsetY)
+                && board.getAllPiecesPositions().contains(new Point(oldX + offsetX, oldY + offsetY)))
+                && board.getPieceAt(newP) == null;
     }
 
     /**
      * Sprawdza czy ruch z punktu oldPoint na newPoint spełnia reguły.
+     *
      * @param oldPoint stara pozycja
      * @param newPoint nowa pozycja
      * @return true jeśli spełnia reguły
      */
     public boolean isValidMove(Point oldPoint, Point newPoint) {
-        return (abs(oldPoint.x - newPoint.x) == 1 && abs(oldPoint.y - newPoint.y) == 1)
-                || (abs(oldPoint.x - newPoint.x) == 2 && abs(oldPoint.y - newPoint.y) == 0);
+        return ((abs(oldPoint.x - newPoint.x) == 1 && abs(oldPoint.y - newPoint.y) == 1)
+                || (abs(oldPoint.x - newPoint.x) == 2 && abs(oldPoint.y - newPoint.y) == 0))
+                && board.getPieceAt(newPoint) == null;
     }
 
 
     /**
      * Sprawdza czy skok z punktu oldPoint na newPoint spełnia reguły.
+     *
      * @param oldPoint stara pozycja
      * @param newPoint nowa pozycja
      * @return jeśli spełnia reguły
@@ -274,6 +285,7 @@ public class BasicSternhalma implements Game {
 
     /**
      * Zwraca Set winners.
+     *
      * @return
      */
     public Set<Integer> getWinners() {
@@ -282,6 +294,7 @@ public class BasicSternhalma implements Game {
 
     /**
      * Dodaje id gracza (grupy pionków) do zwycięzców.
+     *
      * @param playerID id gracza (grupy pionków)
      */
     public void addWinner(int playerID) {
@@ -300,6 +313,7 @@ public class BasicSternhalma implements Game {
 
     /**
      * Wysyła informację o wygranej gracza playerID do wszystkich graczy.
+     *
      * @param playerID id gracza (grupy pionków)
      */
     private void broadcastWinner(int playerID) {
@@ -320,11 +334,12 @@ public class BasicSternhalma implements Game {
 
     /**
      * Sprawdza czy wszyscy gracze są połączeni.
+     *
      * @return true jeśli wszyscy są połączeni, false jeśli ktoś stracił połączenie.
      */
-    private boolean checkPlayersConnected(){
-        for(Player p : players.keySet()) {
-            if(!p.isAlive()) {
+    private boolean checkPlayersConnected() {
+        for (Player p : players.keySet()) {
+            if (!p.isAlive()) {
                 players.keySet().forEach(p2 -> {
                     p2.sendMessage(NetworkMessages.GAME_END_PLAYER_DISCONNECTED);
                 });
@@ -337,6 +352,7 @@ public class BasicSternhalma implements Game {
 
     /**
      * Zwraca unikalną nazwę gry (określoną w Games.java).
+     *
      * @return unikalna nazwa gry.
      */
     @Override
