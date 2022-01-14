@@ -1,0 +1,13 @@
+com.sternhalma.client
+com.sternhalma.client.connection
+com.sternhalma.client.games
+com.sternhalma.client.games.basicsternhalma
+com.sternhalma.client.games.basicsternhalma.gui
+com.sternhalma.client.gui
+com.sternhalma.common.connection
+com.sternhalma.common.games
+com.sternhalma.common.games.basicsternhalma
+com.sternhalma.server
+com.sternhalma.server.connection
+com.sternhalma.server.games
+com.sternhalma.server.games.basicsternhalma
