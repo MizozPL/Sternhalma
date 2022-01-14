@@ -81,7 +81,7 @@ public class BoardPanel extends JPanel implements MouseListener {
      * @param e MouseEvent
      */
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mousePressed(MouseEvent e) {
         Point point = unscaleCords(e.getPoint());
         if (board.getPieceAt(point) != null) {
             selectedPosition = point;
@@ -180,7 +180,7 @@ public class BoardPanel extends JPanel implements MouseListener {
      * @param e MouseEvent
      */
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mouseClicked(MouseEvent e) {
     }
 
     /**
