@@ -1,0 +1,18 @@
+Instrukcja uruchomienia:
+1) Kompilacja:
+	mvn package
+2)Uruchomienie serwera:
+	java -cp target\Sternhalma-1.0-SNAPSHOT.jar com.sternhalma.server.ServerMain
+albo
+	java -cp target\Sternhalma-1.0-SNAPSHOT.jar com.sternhalma.server.ServerMain [ip] [port]
+3)Uruchomienie klienta:
+	java -cp target\Sternhalma-1.0-SNAPSHOT.jar com.sternhalma.client.ClientMain
+
+	W wyskakujących okienkach należy podać ip serwera, port, i id gry.
+
+
+Jak grać:
+0) W lewym górnym rogu mamy pokazany nasz kolor, po środku kolor gracza, którego jest teraz tura, a w prawym górnym rogu przycisk końca tury.
+1) Zaznaczamy pionek, którym ruch chcemy wykonać.
+2) Wykonujemy ruch zaznaczając pole docelowe (w jednej turze można wykonać kilka skoków).
+3) Naciskamy koniec tury.
