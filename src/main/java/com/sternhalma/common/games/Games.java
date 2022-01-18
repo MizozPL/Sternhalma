@@ -14,4 +14,5 @@ public class Games {
      * Podstawowa wersja gry.
      */
     public static final String BASIC_STERNHALMA = "BASIC_STERNHALMA";
+    public static final String STERNHALMA_NO_JUMPS = "STERNHALMA_NO_JUMPS";
 }

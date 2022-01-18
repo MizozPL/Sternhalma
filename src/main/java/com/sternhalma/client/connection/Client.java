@@ -44,7 +44,7 @@ public class Client {
     /**
      * Nazwa typu gry, do którego dołączamy (i tworzymy).
      */
-    private static final String GAME_NAME = Games.BASIC_STERNHALMA;
+    private static final String GAME_NAME = Games.STERNHALMA_NO_JUMPS;
 
     /**
      * Konstruktor inicjalizujący wartości pobranew kklasie ClientMain.java.

@@ -2,6 +2,7 @@ package com.sternhalma.server.games;
 
 import com.sternhalma.common.games.Games;
 import com.sternhalma.server.games.basicsternhalma.BasicSternhalma;
+import com.sternhalma.server.games.basicsternhalma.SternhalmaNoJumps;
 
 /**
  * Klasa statyczna tworząca odpowiednie instancje gier.
@@ -24,6 +25,9 @@ public class GameFactory {
         switch (gameName) {
             case Games.BASIC_STERNHALMA -> {
                 return new BasicSternhalma();
+            }
+            case Games.STERNHALMA_NO_JUMPS -> {
+                return new SternhalmaNoJumps();
             }
             default -> {
                 return null;
