@@ -22,7 +22,7 @@ public class GameFactory {
      */
     public static Game createGameInstance(String gameName) {
         switch (gameName) {
-            case Games.BASIC_STERNHALMA, Games.STERNHALMA_NO_JUMPS -> {
+            case Games.BASIC_STERNHALMA, Games.STERNHALMA_NO_JUMPS, Games.STERNHALMA_EXTENDED_MOVE_LENGTH -> {
                 return new BasicSternhalma();
             }
             default -> {

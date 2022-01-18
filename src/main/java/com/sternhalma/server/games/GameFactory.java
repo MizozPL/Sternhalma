@@ -2,6 +2,7 @@ package com.sternhalma.server.games;
 
 import com.sternhalma.common.games.Games;
 import com.sternhalma.server.games.basicsternhalma.BasicSternhalma;
+import com.sternhalma.server.games.basicsternhalma.SternhalmaExtendedMoveLength;
 import com.sternhalma.server.games.basicsternhalma.SternhalmaNoJumps;
 
 /**
@@ -28,6 +29,9 @@ public class GameFactory {
             }
             case Games.STERNHALMA_NO_JUMPS -> {
                 return new SternhalmaNoJumps();
+            }
+            case Games.STERNHALMA_EXTENDED_MOVE_LENGTH -> {
+                return new SternhalmaExtendedMoveLength();
             }
             default -> {
                 return null;

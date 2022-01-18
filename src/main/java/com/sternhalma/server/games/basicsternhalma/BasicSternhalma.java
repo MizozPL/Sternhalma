@@ -26,7 +26,7 @@ public class BasicSternhalma implements Game {
     /**
      * Plansza, na której toczy się rozgrywka.
      */
-    private final Board board;
+    protected final Board board;
     /**
      * Numer tury.
      */

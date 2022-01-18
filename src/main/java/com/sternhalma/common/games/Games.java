@@ -15,4 +15,5 @@ public class Games {
      */
     public static final String BASIC_STERNHALMA = "BASIC_STERNHALMA";
     public static final String STERNHALMA_NO_JUMPS = "STERNHALMA_NO_JUMPS";
+    public static final String STERNHALMA_EXTENDED_MOVE_LENGTH = "STERNHALMA_EXTENDED_MOVE_LENGTH";
 }
