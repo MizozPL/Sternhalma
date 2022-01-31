@@ -3,6 +3,7 @@ package com.sternhalma.server;
 import com.sternhalma.server.connection.Player;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,7 @@ public class GameHistory {
 
     }
 @Transient
-private static final String JOIN_REQUEST = "JOIN";
+public static final String JOIN_REQUEST = "JOIN";
     @Transient
     private int counter = 0;
     @Transient
@@ -46,6 +47,14 @@ private static final String JOIN_REQUEST = "JOIN";
             requests.add(JOIN_REQUEST);
             counter++;
         }
+    }
+
+    public List<Integer> getPlayerIDs(){
+        return playerIDs;
+    }
+
+    public List<String> getRequests() {
+        return requests;
     }
 
     public Integer getId() {

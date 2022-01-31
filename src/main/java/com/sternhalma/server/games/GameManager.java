@@ -1,14 +1,13 @@
 package com.sternhalma.server.games;
 
 import com.sternhalma.common.connection.NetworkMessages;
+import com.sternhalma.common.replay.ReplayPacket;
 import com.sternhalma.server.GameHistory;
 import com.sternhalma.server.GameHistoryRepository;
 import com.sternhalma.server.connection.Player;
+import org.hibernate.internal.util.SerializationHelper;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Klasa zarządzająca wszystkimi istniejącymi grami na serwerze. Singleton.
@@ -108,9 +107,12 @@ public class GameManager {
         player.sendMessage(NetworkMessages.GAME_WITH_ID_DOES_NOT_EXIST);
     }
 
-    public synchronized GameHistory getGameReplay(int replayID) {
-        Optional<GameHistory> gameHistory = gameHistoryRepository.findById(replayID);
-        return gameHistory.orElse(null);
+    public synchronized ReplayPacket getGameReplay(int replayID) {
+        Optional<GameHistory> gameHistoryOptional = gameHistoryRepository.findById(replayID);
+        GameHistory gameHistory = gameHistoryOptional.orElse(null);
+        if(gameHistory == null)
+            return null;
+        return new ReplayPacket(new ArrayList<>(gameHistory.getPlayerIDs()), new ArrayList<>(gameHistory.getRequests()));
     }
 
     public synchronized List<Integer> getAllReplayIDs() {

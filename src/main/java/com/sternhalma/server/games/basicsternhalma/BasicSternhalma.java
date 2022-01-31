@@ -355,6 +355,10 @@ public class BasicSternhalma implements Game {
         return true;
     }
 
+    public Board getBoard(){
+        return board;
+    }
+
     /**
      * Zwraca unikalną nazwę gry (określoną w Games.java).
      *
@@ -363,5 +367,9 @@ public class BasicSternhalma implements Game {
     @Override
     public String getGameName() {
         return Games.BASIC_STERNHALMA;
+    }
+
+    public int getTurn() {
+        return turn;
     }
 }
