@@ -2,8 +2,10 @@ package com.sternhalma.server.games;
 
 import com.sternhalma.common.connection.NetworkMessages;
 import com.sternhalma.server.connection.Player;
+import databse.GameHistory;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Klasa zarządzająca wszystkimi istniejącymi grami na serwerze. Singleton.
@@ -19,15 +21,22 @@ public class GameManager {
      */
     private final HashMap<String, Game> games;
 
+    private final HashMap<String, GameHistory> gameHistories;
+
+    private final HashSet<String> savedGames;
+
     /**
      * Prywatny konstruktor (singleton).
      */
     private GameManager() {
-        games = new HashMap<String, Game>();
+        games = new HashMap<>();
+        gameHistories = new HashMap<>();
+        savedGames = new HashSet<>();
     }
 
     /**
      * Zwraca instancję klasy.
+     *
      * @return instancja klasy
      */
     public static GameManager getInstance() {
@@ -36,8 +45,9 @@ public class GameManager {
 
     /**
      * Tworzy nową grę o danym kodzie i typie.
-     * @param player handler twórcy gry
-     * @param gameID id gry, dowolny unikalny string
+     *
+     * @param player   handler twórcy gry
+     * @param gameID   id gry, dowolny unikalny string
      * @param gameType typ gry (z Games.java)
      */
     public synchronized void createGame(Player player, String gameID, String gameType) {
@@ -51,11 +61,13 @@ public class GameManager {
             return;
         }
         games.put(gameID, game);
+        gameHistories.put(gameID, new GameHistory());
         player.sendMessage(NetworkMessages.GAME_CREATED);
     }
 
     /**
      * Wykonuje akcję action przez gracza o handlerze player na grze gameID.
+     *
      * @param player handler gracza wykonującego akcję
      * @param gameID id gry, na której akcja jest wykonana
      * @param action odpowiednio spreparowany String akcji
@@ -63,6 +75,12 @@ public class GameManager {
     public synchronized void performAction(Player player, String gameID, String action) {
         if (games.containsKey(gameID)) {
             games.get(gameID).performAction(player, action);
+            gameHistories.get(gameID).putAction(player, action);
+            if(!savedGames.contains(gameID) && games.get(gameID).isEnded()){
+                savedGames.add(gameID);
+                //TODO: Zapis do bazy danych;
+            }
+
             return;
         }
         player.sendMessage(NetworkMessages.GAME_WITH_ID_DOES_NOT_EXIST);
@@ -70,12 +88,14 @@ public class GameManager {
 
     /**
      * Dołącza gracza o handlerze player do gry gameID.
+     *
      * @param player handler gracza
      * @param gameID id gry
      */
     public synchronized void joinGame(Player player, String gameID) {
         if (games.containsKey(gameID)) {
             games.get(gameID).joinPlayer(player);
+            gameHistories.get(gameID).putPlayerJoin(player);
             return;
         }
         player.sendMessage(NetworkMessages.GAME_WITH_ID_DOES_NOT_EXIST);

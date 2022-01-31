@@ -155,6 +155,11 @@ public class BasicSternhalma implements Game {
 
     }
 
+    @Override
+    public boolean isEnded() {
+        return gameFinished;
+    }
+
     /**
      * Akcja zakończenia tury przez gracza. Sprawdzane tu jest m.in. czy ustawił wszystkie piony w bazie. Przesyła zaktualizowaną planszę do wszystkich graczy.
      *
