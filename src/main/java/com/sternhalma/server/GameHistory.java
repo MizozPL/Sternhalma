@@ -1,4 +1,4 @@
-package databse;
+package com.sternhalma.server;
 
 import com.sternhalma.server.connection.Player;
 

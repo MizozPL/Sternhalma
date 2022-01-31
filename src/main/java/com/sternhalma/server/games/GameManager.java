@@ -1,11 +1,14 @@
 package com.sternhalma.server.games;
 
 import com.sternhalma.common.connection.NetworkMessages;
+import com.sternhalma.server.GameHistory;
+import com.sternhalma.server.GameHistoryRepository;
 import com.sternhalma.server.connection.Player;
-import databse.GameHistory;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Klasa zarządzająca wszystkimi istniejącymi grami na serwerze. Singleton.
@@ -24,6 +27,8 @@ public class GameManager {
     private final HashMap<String, GameHistory> gameHistories;
 
     private final HashSet<String> savedGames;
+
+    public static GameHistoryRepository gameHistoryRepository;
 
     /**
      * Prywatny konstruktor (singleton).
@@ -76,9 +81,11 @@ public class GameManager {
         if (games.containsKey(gameID)) {
             games.get(gameID).performAction(player, action);
             gameHistories.get(gameID).putAction(player, action);
-            if(!savedGames.contains(gameID) && games.get(gameID).isEnded()){
+            if (!savedGames.contains(gameID) && games.get(gameID).isEnded()) {
                 savedGames.add(gameID);
-                //TODO: Zapis do bazy danych;
+                gameHistoryRepository.save(gameHistories.get(gameID));
+                //TODO: Zapis do bazy danych ^ chyba git;
+
             }
 
             return;
@@ -100,4 +107,14 @@ public class GameManager {
         }
         player.sendMessage(NetworkMessages.GAME_WITH_ID_DOES_NOT_EXIST);
     }
+
+    public synchronized GameHistory getGameReplay(int replayID) {
+        Optional<GameHistory> gameHistory = gameHistoryRepository.findById(replayID);
+        return gameHistory.orElse(null);
+    }
+
+    public synchronized List<Integer> getAllReplayIDs() {
+        return gameHistoryRepository.selectReplayIDs();
+    }
+
 }
