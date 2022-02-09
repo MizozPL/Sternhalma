@@ -3,6 +3,7 @@ package com.sternhalma.server.connection;
 import com.sternhalma.common.connection.NetworkMessages;
 import com.sternhalma.server.games.GameManager;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -63,6 +64,19 @@ public class Player implements Runnable {
                         String gameID = tokens[1];
                         String action = tokens[2];
                         GameManager.getInstance().performAction(this, gameID, action);
+                    }
+                    case NetworkMessages.LIST_REPLAYS -> {
+                        sendObject(GameManager.getInstance().getAllReplayIDs());
+                    }
+                    case NetworkMessages.GET_REPLAY -> {
+                        String replayID = tokens[1];
+                        int replayIDint;
+                        try {
+                            replayIDint = Integer.parseInt(replayID);
+                        } catch (NumberFormatException ex) {
+                            continue;
+                        }
+                        sendObject(GameManager.getInstance().getGameReplay(replayIDint));
                     }
                     default -> {
                         sendMessage(NetworkMessages.BAD_REQUEST);

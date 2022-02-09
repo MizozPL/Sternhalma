@@ -27,6 +27,10 @@ public class NetworkMessages {
     public static final String GAME_END = "GAME_END";
     public static final String GAME_END_PLAYER_DISCONNECTED = "GAME_END_PLAYER_DISCONNECTED";
 
+    //REPLAYS
+    public static final String LIST_REPLAYS = "LIST_REPLAYS";
+    public static final String GET_REPLAY = "GET_REPLAY";
+
     /**
      * Prywatny konstruktor.
      */

@@ -155,6 +155,11 @@ public class BasicSternhalma implements Game {
 
     }
 
+    @Override
+    public boolean isEnded() {
+        return gameFinished;
+    }
+
     /**
      * Akcja zakończenia tury przez gracza. Sprawdzane tu jest m.in. czy ustawił wszystkie piony w bazie. Przesyła zaktualizowaną planszę do wszystkich graczy.
      *
@@ -350,6 +355,10 @@ public class BasicSternhalma implements Game {
         return true;
     }
 
+    public Board getBoard(){
+        return board;
+    }
+
     /**
      * Zwraca unikalną nazwę gry (określoną w Games.java).
      *
@@ -358,5 +367,9 @@ public class BasicSternhalma implements Game {
     @Override
     public String getGameName() {
         return Games.BASIC_STERNHALMA;
+    }
+
+    public int getTurn() {
+        return turn;
     }
 }

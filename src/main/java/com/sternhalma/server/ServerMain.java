@@ -1,10 +1,16 @@
 package com.sternhalma.server;
 
 import com.sternhalma.server.connection.Server;
+import com.sternhalma.server.games.GameManager;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 /**
  * Klasa parsująca adres i port dla serwera oraz go uruchamiająca.
  */
+@SpringBootApplication
 public class ServerMain {
 
     /**
@@ -18,6 +24,7 @@ public class ServerMain {
 
     /**
      * Punkt wejściowy serwera.
+     *
      * @param args - opcjonalne port(args[0]) i adres(args[1])
      */
     public static void main(String[] args) {
@@ -29,7 +36,15 @@ public class ServerMain {
                 ex.printStackTrace();
             }
         }
+        SpringApplication.run(ServerMain.class, args);
         Server server = new Server(ADDRESS, PORT);
         server.start();
+    }
+
+    @Bean
+    public CommandLineRunner run(GameHistoryRepository gameHistoryRepository) {
+        return (args -> {
+            GameManager.gameHistoryRepository = gameHistoryRepository;
+        });
     }
 }

@@ -19,6 +19,8 @@ public interface Game {
      */
     void performAction(Player player, String action);
 
+    boolean isEnded();
+
     /**
      * Zwraca unikalną nazwę gry - powinna być zapisana w pliku Games.java.
      * @return unikalna nazwa gry
